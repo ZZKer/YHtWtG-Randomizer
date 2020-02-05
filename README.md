@@ -2,13 +2,13 @@ Thank you for trying out the You Have To Win The Game randomizer!
 This is version 1.1
 This was created by ZZKylie / ZZKer
 
-Version features:
- 1.1:
-  -  Special map edit designed for Randomizer to prevent softlocks.
- 1.0:
-  -  Orb randomization.
-  -  Seeded random.
-  -  BUG: Some seeds lead to softlocks if orbs are done in the wrong order. To avoid this, always go right at the beginning.
+Version features
+1.1:
+ -  Special map edit designed for Randomizer to prevent softlocks.
+1.0:
+ -  Orb randomization.
+ -  Seeded random.
+ -  BUG: Some seeds lead to softlocks if orbs are done in the wrong order. To avoid this, always go right at the beginning.
 
 Needed files:
  -  Python 3.8.1 to run program (earlier versions of Python 3 might work. 3.7.3 confirmed to work):
