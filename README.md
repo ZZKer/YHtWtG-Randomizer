@@ -7,9 +7,10 @@ Version features:
      -  Seeded random.
 
 Needed files:
- -  Python 3.8.1 to run program (might work with earlier Python 3 versions)
+ -  Python 3.8.1 to run program (might work with earlier Python 3 versions):
+   https://www.python.org/downloads/
  -  You Have to Win the Game example map:
-http://www.piratehearts.com/files/YHtWtG_Campaign.zip
+   http://www.piratehearts.com/files/YHtWtG_Campaign.zip
 
 Install:
  -  Make sure Python is installed
