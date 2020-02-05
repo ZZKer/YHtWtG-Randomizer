@@ -3,8 +3,9 @@ This is version 1.0
 This was created by ZZKylie / ZZKer
 
 Version features:
- 1.0 -  Orb randomization. All orb combinations are possible.
-     -  Seeded random.
+ 1.0:
+  -  Orb randomization. All orb combinations are possible.
+  -  Seeded random.
 
 Needed files:
  -  Python 3.8.1 to run program (might work with earlier Python 3 versions):
