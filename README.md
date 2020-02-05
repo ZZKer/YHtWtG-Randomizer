@@ -4,8 +4,9 @@ This was created by ZZKylie / ZZKer
 
 Version features:
  1.0:
-  -  Orb randomization. All orb combinations are possible.
+  -  Orb randomization.
   -  Seeded random.
+  -  BUG: Some seeds lead to softlocks if certain bells/saves are hit
 
 Needed files:
  -  Python 3.8.1 to run program (might work with earlier Python 3 versions):
