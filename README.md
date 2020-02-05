@@ -2,9 +2,11 @@ Thank you for trying out the You Have To Win The Game randomizer!
 This is version 1.1
 This was created by ZZKylie / ZZKer
 
-Version features
+-Version features-
+
 1.1:
  -  Special map edit designed for Randomizer to prevent softlocks.
+
 1.0:
  -  Orb randomization.
  -  Seeded random.
@@ -15,11 +17,13 @@ Needed files:
    https://www.python.org/downloads/
  -  You Have to Win the Game example map:
    http://www.piratehearts.com/files/YHtWtG_Campaign.zip
+ -  You Have to Win the Game on Steam (available for free)
 
 Install:
  -  Make sure Python is installed
+ -  Make sure You Have to Win the Game is installed and played at least once (to initialize folders)
  -  Unzip YHtWtG_Campaign.zip into C:\Users\[your user name]\Documents\my games\You Have to Win the Game\Maps
- -  Place RandomizeYHTWTGv1_1.py and randomBase.map into the same folder
+ -  Place RandomizeYHTWTGv1_1.py and randomBase.map into the same folder as above
  -  That's it! :D
 
 To Run:
