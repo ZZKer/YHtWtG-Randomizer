@@ -1,6 +1,7 @@
 Thank you for trying out the You Have To Win The Game randomizer!
 This is version 1.1
 This was created by ZZKylie / ZZKer
+If you have any questions or suggestions, please contact me on Discord @ ZZKer#1962
 
 -Version features-
 
