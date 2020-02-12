@@ -1,9 +1,14 @@
 Thank you for trying out the You Have To Win The Game randomizer!
-This is version 1.1
+This is version 1.2
 This was created by ZZKylie / ZZKer
 If you have any questions or suggestions, please contact me on Discord @ ZZKer#1962
+If you find any seeds that don't work, please use this github to report it as an Issue
 
 -Version features-
+
+1.2:
+ -  Orbs are now randomized with most treasures (65/69 locations)
+ -  Special map edit to prevent hardlocks, but not all possible softlocks ;)
 
 1.1:
  -  Special map edit designed for Randomizer to prevent softlocks.
@@ -22,16 +27,18 @@ Needed files:
 
 Install:
  -  Make sure Python is installed
- -  Make sure You Have to Win the Game is installed and played at least once (to initialize folders)
+ -  Make sure You Have to Win the Game on Steam is installed and played at least once (to initialize folders)
  -  Unzip YHtWtG_Campaign.zip into C:\Users\[your user name]\Documents\my games\You Have to Win the Game\Maps
- -  Place RandomizeYHTWTGv1_1.py and randomBase.map into the same folder as above
+ -  Place RandomizeYHTWTG.py, randomBase.map, & Rooms_randomBase.xml into the same folder as above
  -  That's it! :D
 
 To Run:
  -  Just double click the .py file and enter a seed number. The new map will appear in your map list in-game.
 
 The Future:
- -  treasure/orb inter-randomization
  -  teleporter randomization
  -  room randomization
+ -  start randomization
+ -  magic word randomization?
  -  maybe even bell and enemy randomization
+ -  Hardmode and glitch logic options
