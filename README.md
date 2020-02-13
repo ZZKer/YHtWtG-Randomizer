@@ -7,7 +7,7 @@ If you find any seeds that don't work, please use this github to report it as an
 -Version features-
 
 1.2:
- -  Orbs are now randomized with most treasures (65/69 locations)
+ -  Orbs are now randomized with most treasures (66/70 locations)
  -  Special map edit to prevent hardlocks, but not all possible softlocks ;)
 
 1.1:
