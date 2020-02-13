@@ -197,7 +197,7 @@ for line in readfile:
                   newline = '<entity template="cash" x="' + str((Treasure[t])[3]) + '" y="' + str((Treasure[t])[4]) + '" />\n'
                   writefile.write(newline)
             t += 1
-            if(t < 66 and (Treasure[t])[0] == (Treasure[t-1])[0] and (Treasure[t])[1] == (Treasure[t-1])[1]):
+            if(t < 67 and (Treasure[t])[0] == (Treasure[t-1])[0] and (Treasure[t])[1] == (Treasure[t-1])[1]):
                   if(t in spots):
                         whichorb = orbs_r[spots.index(t)]
                         newline = '<entity template="orb_'
@@ -217,7 +217,7 @@ for line in readfile:
                         newline = '<entity template="cash" x="' + str((Treasure[t])[3]) + '" y="' + str((Treasure[t])[4]) + '" />\n'
                         writefile.write(newline)
                   t += 1
-            if(t < 66):
+            if(t < 67):
                   tcords = 'room x="'+str((Treasure[t])[0])+'" y="'+str((Treasure[t])[1])+'"'
 readfile.close()
 writefile.close()
