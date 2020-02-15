@@ -24,7 +24,7 @@ Treasure=[(-10,3,'xxxx',292,36),#0
           (4,3,'xXXx',212,92),#53
           (5,0,'1xx1',108,84),(5,0,'1x1x',292,180),(5,1,'1x1x',44,84),(5,2,'EEXx',180,60),(5,4,'xx1x',284,108),(5,6,'xxxx',160,124),#54-59
           (6,1,'1x1x',212,84),#60
-          (7,-1,'1x11',92,148),(7,0,'1xXX',148,124),(7,3,'1x11',68,100),(7,3,'1x11',68,100),#61-64
+          (7,-1,'1x11',92,148),(7,0,'1xXX',148,124),(7,3,'1x11',68,100),(7,3,'1x11',252,100),#61-64
           (8,1,'1xXX',160,124),(8,2,'1x1x',300,180)]#65-66
 possibleT=[0,3,7,8,9,16,17,22,38,40,45,51,59]
 remainingT=[1,2,4,5,6,10,11,12,13,14,15,18,19,20,21,23,25,26,27,28,29,30,31,32,33,34,35,36,37,39,41,42,43,44,46,47,48,49,50,52,53,54,55,56,57,58,60,61,62,63,64,65,66]
@@ -228,11 +228,11 @@ gamfilename = 'random' + seed + '.gam'
 writefile = open(gamfilename, 'w')
 gam_text = 'Title: Rand' + seed + '\n'
 gam_text += 'FullTitle: Randomizer seed ' + seed +'\n'
-gam_text += 'DevTeam: ZZKylie & the WtG Speedrun Discord\n'
+gam_text += 'DevTeam: ZZKylie & WtG Speedrun Discord\n'
 gam_text += 'DevLogo: phearts.bmp\n'
 gam_text += "Author: ZZKylie / ZZKer" + '\n'
 gam_text += "URL: ZZKer#1962" + '\n'
-gam_text += 'Description: Orb Randomizer version 1.2\n'
+gam_text += 'Description: Orb Randomizer version 1.2.006\n'
 gam_text += 'MajorVersion: 1\n'
 gam_text += 'MinorVersion: 2\n'
 gam_text += 'Map: randomBase.map\n'
