@@ -1,8 +1,8 @@
 Thank you for trying out the You Have To Win The Game randomizer!
-This is version 1.2
-This was created by ZZKylie / ZZKer
-If you have any questions or suggestions, please contact me on Discord @ ZZKer#1962
-If you find any seeds that don't work, please use this github to report it as an Issue
+This is version 1.2.06
+This was created by ZZKylie / ZZKer.
+If you have any questions or suggestions, please contact me on Discord @ ZZKer#1962.
+If you find any seeds that don't work, please use this github to report it as an Issue.
 
 -Version features-
 
