@@ -10,7 +10,7 @@ seed = str(seed)
 Treasure=[(-10,3,'xxxx',292,36),#0
           (-9,6,'xXXX',220,84),#1
           (-8,1,'xx11',36,180),(-8,2,'xxxx',160,124),(-8,3,'xXXx',108,44),(-8,5,'xxx1',100,148),(-8,6,'xXXX',236,124),#2-6
-          (-7,1,'xxxx',252,180),(-7,2,'xxxx',20,116),(-7,2,'xxxx',236,44),(-7,4,'xXXX',212,68),#7-10
+          (-7,1,'xxxx',252,180),(-7,2,'xxxx',20,116),(-7,2,'xxxx',236,44),(-7,4,'xxXX',212,68),#7-10
           (-6,3,'xx1x',252,68),(-6,4,'xx1x',244,44),(-6,6,'xx11',244,108),#11-13
           (-5,0,'xx11',276,148),(-5,1,'1xxx',204,68),(-5,2,'xxxx',228,172),(-5,3,'xxxx',44,28),(-5,6,'xx1x',164,132),(-5,6,'xxXX',220,84),#14-19
           (-4,-1,'xx11',164,68),(-4,0,'xx11',44,52),(-4,0,'xxxx',68,148),(-4,3,'xXXX',236,180),(-4,3,'0xxX',268,108),(-4,6,'xXXX',292,84),#20-25
@@ -232,7 +232,7 @@ gam_text += 'DevTeam: ZZKylie & WtG Speedrun Discord\n'
 gam_text += 'DevLogo: phearts.bmp\n'
 gam_text += "Author: ZZKylie / ZZKer" + '\n'
 gam_text += "URL: ZZKer#1962" + '\n'
-gam_text += 'Description: Orb Randomizer version 1.2.006\n'
+gam_text += 'Description: Orb Randomizer version 1.2.007\n'
 gam_text += 'MajorVersion: 1\n'
 gam_text += 'MinorVersion: 2\n'
 gam_text += 'Map: randomBase.map\n'
