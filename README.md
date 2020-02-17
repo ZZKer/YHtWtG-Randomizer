@@ -1,5 +1,5 @@
 Thank you for trying out the You Have To Win The Game randomizer!
-This is version 1.2.07.
+This is version 1.2.08.
 This was created by ZZKylie / ZZKer.
 If you have any questions or suggestions, please contact me on Discord @ ZZKer#1962.
 If you find any seeds that don't work, please use this github to report it as an Issue.
@@ -37,7 +37,7 @@ To Run:
 
 The Future:
  -  Version 1.3 will have a windowed interface as well as options that can be turned on and off
- -  Version 1.3 will have lose orb randomization
+ -  Version 1.3 will have lose orb randomization option
  -  Version 1.3 will add the option to require all orbs to win
  -  teleporter randomization
  -  room randomization
