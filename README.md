@@ -1,10 +1,20 @@
 Thank you for trying out the You Have To Win The Game randomizer!
-This is version 1.2.08.
+This is version 1.3.
 This was created by ZZKylie / ZZKer.
 If you have any questions or suggestions, please contact me on Discord @ ZZKer#1962.
 If you find any seeds that don't work, please use this github to report it as an Issue.
 
 -Version features-
+
+1.3:
+ -  Graphical User Interface for ease of use
+ -  Option to require all orbs to win
+ -  Option to randomize Lose Orb and include "Consolation Prize" in treasure list
+ -  Settings Seed to share your settings with others (will be more helpful as more options are added)
+ -  Seed can now be any alpha-numeric string, not just numbers
+ -  More treasure locations added (68/70 locations)
+ -  Reworked logic when placing items before the drop at the start
+ -  BUG: There is a chance of hardlocking when Red orb is required first and placed after "Pit Stop"
 
 1.2:
  -  Orbs are now randomized with most treasures (66/70 locations)
@@ -33,12 +43,16 @@ Install:
  -  That's it! :D
 
 To Run:
- -  Just double click the .py file and enter a seed number. The new map will appear in your map list in-game.
+ -  Double click the .py file to bring up the user interface.
+ -  Check the options you want and enter the seed in the "Randomizer Seed" box.
+ -  Click the "Randomize" button to create the randomized file.
+ -  The new map will appear in your map list in-game.
+
+Options Explaination:
+ -  Require All Orbs: All 4 orbs are required to reach the Win orb.
+ -  Randomize Lose Orb: Chooses a random location for the Lose orb and adds the two treasure locations in "Consolation Prize" to possible orb locations.
 
 The Future:
- -  Version 1.3 will have a windowed interface as well as options that can be turned on and off
- -  Version 1.3 will have lose orb randomization option
- -  Version 1.3 will add the option to require all orbs to win
  -  teleporter randomization
  -  room randomization
  -  start randomization
