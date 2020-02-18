@@ -270,8 +270,6 @@
 </room>
 
 <room x="-1" y="-2" title="Open Sesame">
-	<entity template="gate" x="296" y="144"
-		destwx="0" destwy="-2" destrx="24" destry="152" />
 </room>
 
 <room x="-1" y="-1" title="From Another World" />
@@ -296,12 +294,6 @@
 </room>
 
 <room x="0" y="-3" title="Consolation Prize">
-	<entity template="orb_lose" x="160" y="136" />
-	<entity template="cash" x="292", y="180" />
-</room>
-
-<room x="0" y="-2" title="Eponymous">
-	<entity template="orb_win" x="160" y="136" />
 </room>
 
 <room x="0" y="-1" title="Harbinger" />
