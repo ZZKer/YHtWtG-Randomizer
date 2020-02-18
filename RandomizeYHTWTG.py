@@ -179,6 +179,10 @@ def run_randomizer():
       orbs_r.append(10)
       spots.append(loseorb)
 
+      extraTeleporters= [(-1,-2,296,144,1,-2,24,152),#win if op_allorbs is on
+                   (0,-3,296,144,-3,0,24,144),#teleport from lose
+                   (0,-2,296,144,-3,0,24,144)]#teleport from win
+
       #once all set, create file and set all orbs and treasure
       # Write ROOMS file, setting the orb possitions
       writefilename = 'Rooms_random_' + seed + '.xml'
@@ -187,9 +191,17 @@ def run_randomizer():
       t = 0
       tcords = 'room x="'+str((Treasure[t])[0])+'" y="'+str((Treasure[t])[1])+'"'
       gateatlose = op_lose.get()
+      gateforallorbs = op_allorbs.get()
+      newline = ''
       for line in readfile:
             writefile.write(line)
-            if(gateatlose and ('room x="0" y="-3"' in line)):
+            if('room x="-1" y="-2"' in line):
+                  if(gateforallorbs):
+                        newline = '<entity template="gate" x="296" y="144" destwx="1" destwy="-2" destrx="24" destry="152" />\n'
+                  else:
+                        newline = '<entity template="gate" x="296" y="144" destwx="0" destwy="-2" destrx="24" destry="152" />\n'
+                  writefile.write(newline)
+            elif(gateatlose and ('room x="0" y="-3"' in line)):
                   newline = '<entity template="gate" x="296" y="144" destwx="-3" destwy="0" destrx="24" destry="144" />\n'
                   writefile.write(newline)
                   gateatlose = False
@@ -236,6 +248,16 @@ def run_randomizer():
                   if(t < len(Treasure)):
                         tcords = 'room x="'+str((Treasure[t])[0])+'" y="'+str((Treasure[t])[1])+'"'
       readfile.close()
+      #op_allorbs code for rooms
+      if(gateforallorbs):
+            newline = '\n\n<room x="1" y="-2" title="What Do I Win?" />\n\n'
+            newline += '<room x="2" y="-2" title="Only A Transition" />\n\n'
+            newline += '<room x="3" y="-2" title="Eponymous">\n'
+            newline += '<entity template="orb_win" x="300" y="176" />\n</room>\n'
+      else:
+            newline = '\n\n<room x="0" y="-2" title="Eponymous">\n'
+            newline += '<entity template="orb_win" x="160" y="136" />\n</room>\n'
+      writefile.write(newline)
       writefile.close()
 
 
@@ -325,18 +347,22 @@ mainwindow.mainloop()
 
 
 
-Teleporters= [(-7,3,120,160,-9,4,304,64),
-              (-6,4,192,32,-9,4,304,64),
-              (-3,4,80,104,-3,4,176,104),
-              (-3,4,160,104,-3,4,64,104),
-              (-2,-2,24,160,-1,-3,200,104),
-              (-2,5,288,88,0,2,160,112),
-              (-1,-3,296,144,0,-3,24,152),
-              (-1,-2,296,144,0,-2,24,152),
-              (2,1,88,104,6,4,24,24),
-              (3,5,40,72,0,2,160,112),
-              (7,3,160,32,0,2,160,112),
-              (8,2,32,32,6,1,16,160)]
+#Teleporters= [(-7,3,120,160,-9,4,304,64),#0
+#              (-6,4,192,32,-9,4,304,64),#1
+#              (-3,4,80,104,-3,4,176,104),#2
+#              (-3,4,160,104,-3,4,64,104),#3
+#              (-2,-2,24,160,-1,-3,200,104),#4
+#              (-2,5,288,88,0,2,160,112),#5
+#              (-1,-3,296,144,0,-3,24,152),#6: lose
+#              (-1,-2,296,144,0,-2,24,152),#7: win (vanilla)
+#              (2,1,88,104,6,4,24,24),#8
+#              (3,5,40,72,0,2,160,112),#9
+#              (7,3,160,32,0,2,160,112),#10
+#              (8,2,32,32,6,1,16,160)]#11
+#
+#extraTeleporters= [(-1,-2,296,144,1,-2,24,152),#win if op_allorbs is on
+#                   (0,-3,296,144,-3,0,24,144),#teleport from lose
+#                   (0,-2,296,144,-3,0,24,144)]#teleport from win
 
 
 #v2 code for room randomization
@@ -359,3 +385,23 @@ Teleporters= [(-7,3,120,160,-9,4,304,64),
 #           ['Clarity Comes in Waves','Great Hall','Cave Painting','The Loneliest Corner','Rough Landing','Bring a Mallet','Dire Crab','x','x','x'],
 #           ['The Floor Is Lava','Hollow King Transformed','Worth It?','Secret Cat Level','Feline Foreshadowing','x','x','x','x','An Even 0x80'],
 #           ['Brazen Machines','Spider Gloves','Not Worth It!','x','x','x','x','x','x','x']]
+#
+#Roomlocation=[(-10,2),(-10,3),#0-1
+#              (-9,2),(-9,3),(-9,4),(-9,5),(-9,6),#2-6
+#              (-8,1),(-8,2),(-8,3),(-8,4),(-8,5),(-8,6),#7-12
+#              (-7,1),(-7,2),(-7,3),(-7,4),(-7,5),(-7,6),#13-18
+#              (-6,1),(-6,2),(-6,3),(-6,4),(-6,5),(-6,6),#19-24
+#              (-5,-3),(-5,-2),(-5,-1),(-5,0),(-5,1),(-5,2),(-5,3),(-5,4),(-5,5),(-5,6),#25-34
+#              (-4,-3),(-4,-2),(-4,-1),(-4,0),(-4,1),(-4,2),(-4,3),(-4,4),(-4,5),(-4,6),#35-44
+#              (-3,-3),(-3,-2),(-3,-1),(-3,0),(-3,1),(-3,2),(-3,3),(-3,4),(-3,5),(-3,6),#45-54
+#              (-2,-3),(-2,-2),(-2,-1),(-2,0),(-2,1),(-2,2),(-2,3),(-2,4),(-2,5),(-2,6),#55-64
+#              (-1,-3),(-1,-2),(-1,-1),(-1,0),(-1,1),(-1,2),(-1,3),(-1,4),(-1,5),(-1,6),#65-74
+#              (0,-3),(0,-2),(0,-1),(0,0),(0,1),(0,2),(0,3),(0,4),#75-82
+#              (1,-1),(1,0),(1,1),(1,2),(1,3),(1,4),#83-88
+#              (2,0),(2,1),(2,2),(2,3),(2,4),#89-93
+#              (3,0),(3,1),(3,2),(3,3),(3,4),(3,5),(3,6),#94-100
+#              (4,0),(4,1),(4,2),(4,3),(4,4),(4,5),(4,6),#101-107
+#              (5,0),(5,1),(5,2),(5,3),(5,4),(5,5),(5,6),#108-114
+#              (6,0),(6,1),(6,2),(6,3),(6,4),(6,5),(6,6),#115-121
+#              (7,-1),(7,0),(7,1),(7,2),(7,3),(7,4),#122-127
+#              (8,0),(8,1),(8,2)]#128-130
