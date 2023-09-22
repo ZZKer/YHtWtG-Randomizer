@@ -37,7 +37,7 @@ If you find any seeds that don't work, please use this github to report it as an
 ## Install:
  1. Make sure Python is installed
  2. Make sure You Have to Win the Game on Steam is installed and played at least once (to initialize folders)
- 3. Unzip YHtWtG_Campaign.zip into C:\Users\[your user name]\Documents\my games\You Have to Win the Game\Maps
+ 3. Unzip YHtWtG_Campaign.zip into C:\Users\\\[your user name\]\Documents\my games\You Have to Win the Game\Maps
  4. Place RandomizeYHTWTG.py, randomBase.map, & Rooms_randomBase.xml into the same folder as above
  -  That's it! :D
 
