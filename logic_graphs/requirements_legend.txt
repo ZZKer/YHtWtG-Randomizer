@@ -1,0 +1,11 @@
+Requirement values are calculated bitwise, meaning a value of 2 means you need red orb and a value of 3 means you need both red and blue orb.
+To calculate if something with requirement r1 can be reached after something with requirement r2, just perform bitwise OR (r1 | r2).
+-1 = impossible
+0 = no requirements
+1 = blue orb
+2 = red orb
+4 = boots
+8 = gloves
+16 = spike jump
+32 = triple jump
+64 = extended jump
