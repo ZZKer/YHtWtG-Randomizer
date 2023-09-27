@@ -1,0 +1,12 @@
+;"Tower of Sorrows Top";"Tower of Sorrows Right";"Tower of Sorrows Bottom";"Tower of Sorrows Left";"Tower of Sorrows Pickup";"Tower of Regrets Top";"Tower of Regrets Right-Top";"Tower of Regrets Right-Bottom";"Tower of Regrets Bottom";"Tower of Regrets Left";"Tower of Regrets Pickup"
+"Tower of Sorrows Top";8;1,12,20;0;1,12,20;0;;;;0;
+"Tower of Sorrows Right";12,40;0;0;13,41,60;12,40
+"Tower of Sorrows Bottom";12,40;8;0;8;12,40;0
+"Tower of Sorrows Left";12,40;41,60;0;0;41,60
+"Tower of Sorrows Pickup";12,40;1,12,20;0;13,41,60;0
+"Tower of Regrets Top";;;0;;;8;-1;2,12,20;0;2,12,20;-1
+"Tower of Regrets Right-Top";;;;;;-1;0;-1;-1;-1;0
+Tower of Regrets Right-Bottom;;;;;;12,40;-1;0;0;42,60;-1
+"Tower of Regrets Bottom";0;;;;;12,40;-1;8;0;8;-1
+"Tower of Regrets Left";;;;;;12,40;-1;42,60;0;0;-1
+"Tower of Regrets Pickup";;;;;;-1;0;-1;-1;-1;0
