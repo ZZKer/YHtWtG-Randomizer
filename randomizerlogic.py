@@ -63,8 +63,7 @@ def containsEnd(locations, end):
 
 def getLocationRequirements(locationList, filterList):
     locReqList = []
-    for i in range(len(filterList)):
-        filterIndex = filterList[i]
+    for filterIndex in filterList:
         locReqList += [(filterIndex, locationList[filterIndex])]
 
     return locReqList
@@ -73,9 +72,8 @@ def getReachableLocs(locationList, fulfilledRequirements):
     reachableLocs = []
     for loc in locationList:
         requirements = loc[1]
-        for req in requirements:
-            if fulfillsRequirements(req, fulfilledRequirements):
-                reachableLocs += [(loc[0], fulfilledRequirements)]
+        if fulfillsRequirements(requirements, fulfilledRequirements):
+            reachableLocs += [(loc[0], fulfilledRequirements)]
 
     return reachableLocs
 

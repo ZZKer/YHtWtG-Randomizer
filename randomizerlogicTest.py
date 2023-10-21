@@ -20,15 +20,38 @@ class RandomizerLogicTest(unittest.TestCase):
         self.assertFalse((logic.fulfillsRequirements([3], 126)))
         self.assertFalse((logic.fulfillsRequirements([3, 6, 24], 21)))
 
-    @patch('randomizerlogic.fulfillsRequirements')
-    def test_getReachableLocs(self, fulfillsRequirementMock):
-        fulfillsRequirementMock.side_effect=[True, False, True, True, False]
-        self.assertEquals(logic.fulfillsRequirements([],1), True)
-        self.assertEquals(logic.fulfillsRequirements([], 1), False)
-        self.assertEquals(logic.fulfillsRequirements([], 1), True)
-        self.assertEquals(logic.fulfillsRequirements([], 1), True)
-        self.assertEquals(logic.fulfillsRequirements([], 1), False)
 
+    def test_getReachableLocs(self):
+        self.assertEqual(logic.getReachableLocs([("loc0",[0])],0), [("loc0",0)])
+        self.assertEqual(logic.getReachableLocs([("loc0", [0])], 13), [("loc0", 13)])
+        self.assertEqual(logic.getReachableLocs([("loc0", [1])], 0), [])
+        self.assertEqual(logic.getReachableLocs([("loc0", [1,2,4])], 8), [])
+        self.assertEqual(logic.getReachableLocs([("loc0", [1,2])], 5), [("loc0", 5)])
+        self.assertEqual(logic.getReachableLocs([("loc0", [8]),("loc1", [0]),("loc2", [1])], 5), [("loc1", 5), ("loc2", 5)])
+        self.assertEqual(logic.getReachableLocs([("loc0", []),("loc1", [-1]),("loc2", [16])], 15), [])
+
+    def test_getLocationsRequirements(self):
+        locationList = [[0],[1],[2,3],[4,5,6],[0]]
+        self.assertEquals(logic.getLocationRequirements(locationList, [0]),[(0,[0])])
+        self.assertEquals(logic.getLocationRequirements(locationList, [1,2]),[(1,[1]),(2,[2,3])])
+        self.assertEquals(logic.getLocationRequirements(locationList, [3,4]),[(3,[4,5,6]),(4,[0])])
+        self.assertEquals(logic.getLocationRequirements(locationList, [0, 4]), [(0, [0]), (4, [0])])
+
+    def test_addPower(self):
+        self.assertEqual(logic.addPower((0,0),[0]),(0,1))
+        self.assertEqual(logic.addPower((0,0), [1]), (0,0))
+        self.assertEqual(logic.addPower((15,3), [1,2,15,3]), (15,7))
+        self.assertEqual(logic.addPower((15,0), [1,2,3,4]), (15,0))
+
+    def test_filterLocs(self):
+        self.assertEqual(logic.filterLocs([(0,0)],[0],[]),[(0,1)])
+        self.assertEqual(logic.filterLocs([(0, 0)], [0], [(0,1)]), [])
+        self.assertEqual(logic.filterLocs([(1, 0)], [0,1], [(1, 0)]), [(1,2)])
+        self.assertEqual(logic.filterLocs([(15, 3)], [1,2,15,3], []), [(15, 7)])
+        self.assertEqual(logic.filterLocs([(15,6),(0, 0),(1,1),(3,4)], [0,15,1,4], [(0,1),(2,0),(3,4),(15,8)]), [(15, 6),(1,5)])
+
+    def test_findSolution(self):
+        
 
 
 if __name__ == '__main__':
