@@ -1,7 +1,13 @@
 from enum import Enum
-
+import random
 import requirementCalculations as calc
 
+DEFAULT_SPAWN = 27
+DEFAULT_END = 43
+DEFAULT_BLUE_ORB = 3
+DEFAULT_RED_ORB = 63
+DEFAULT_BOOTS = 31
+DEFAULT_GLOVES = 69
 
 class TpShuffleMode(Enum):
     NORMAL = 0
@@ -21,12 +27,19 @@ class RandomizerOptions(object):
     tpAmount = TPShuffleAmount.REGULAR
     hideTps = False
     hidePowerups = False
+    seed = None
 
-def selectSpawnLocation(options):
+def selectSpawnLocation():
     return (27,112)
 
-def selectOrbLocations():
-    return [3, 63, 31, 69]
+def selectOrbLocations(nrLocs = 71, excludeLocs = [27, 43]):
+    orbs = []
+    while len(orbs) < 4:
+        nextOrb = random.randint(0,nrLocs-1)
+        if nextOrb not in excludeLocs and nextOrb not in orbs:
+            orbs += [nextOrb]
+
+    return orbs
 
 def selectEndLocation():
     return 43
@@ -36,23 +49,23 @@ def getOrbLocations(options):
         print(f"options needs to be RandomizerOptions but was {type(options)}, using default options instead")
         options = RandomizerOptions()
 
+    random.seed(options.seed)
+
     connectionTable, labels = calc.readTable("logic_graphs/reduced.csv")
-
-    spawnLocation = selectSpawnLocation(options)
-
-    orbLocations = selectOrbLocations()
-
-    endLocation = selectEndLocation()
 
     while True:
 
+        spawnLocation = selectSpawnLocation()
 
+        orbLocations = selectOrbLocations()
+
+        endLocation = selectEndLocation()
 
         solution = findSolution(connectionTable, spawnLocation, orbLocations, endLocation)
         if solution:
             break
 
-    return solution
+    return orbLocations
 
 def containsEnd(locations, end):
     for loc in locations:
@@ -105,7 +118,7 @@ def findSolution(table, spawn, orbs, end):
     while not containsEnd(currentLocations, end) and len(currentLocations) > 0:
         print(currentLocations)
         loc = currentLocations.pop()
-        visitedLocations += loc
+        visitedLocations += [loc]
 
         filteredLocs = getLocationRequirements(table[loc[0]], orbs + [end])
 

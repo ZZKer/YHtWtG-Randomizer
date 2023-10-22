@@ -1,6 +1,8 @@
 import unittest
 from unittest.mock import patch
+import random
 import randomizerlogic as logic
+import requirementCalculations as calc
 
 
 class RandomizerLogicTest(unittest.TestCase):
@@ -51,7 +53,26 @@ class RandomizerLogicTest(unittest.TestCase):
         self.assertEqual(logic.filterLocs([(15,6),(0, 0),(1,1),(3,4)], [0,15,1,4], [(0,1),(2,0),(3,4),(15,8)]), [(15, 6),(1,5)])
 
     def test_findSolution(self):
+        testMap = calc.readTable("logic_graphs/reduced.csv")[0]
+        spawnLocation = (logic.DEFAULT_SPAWN,112)
+        orbs = [logic.DEFAULT_BLUE_ORB, logic.DEFAULT_RED_ORB, logic.DEFAULT_BOOTS, logic.DEFAULT_GLOVES]
+        end = logic.DEFAULT_END
+
+        self.assertEqual(logic.findSolution(testMap, spawnLocation, orbs, end), True)
+
+        orbs = [17,57,21,64]
+        self.assertEqual(logic.findSolution(testMap, spawnLocation, orbs, end), True)
+        orbs = [17, 57, 22, 64]
+        self.assertEqual(logic.findSolution(testMap, spawnLocation, orbs, end), False)
+
+    @patch('randomizerlogic.selectOrbLocations')
+    def test_getOrbLocations(self, orbSelectionMock):
+        orbSelectionMock.return_value = [3, 63, 31, 69]
+        self.assertEqual(logic.getOrbLocations(None), [3,63,31,69])
         
+    def test_selectOrbLocations(self):
+        random.seed(0)
+        self.assertEqual(logic.selectOrbLocations(), [49,53,5,33])
 
 
 if __name__ == '__main__':
