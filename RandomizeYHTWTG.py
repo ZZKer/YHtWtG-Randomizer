@@ -1,7 +1,7 @@
 import fileinput
 import random
 import tkinter
-import randomizerlogic as newlogic
+import randomizerlogic as logic
 from tkinter import *
 
 # Runs the randomizer code based on the given seed.
@@ -30,167 +30,11 @@ def run_randomizer():
           (6,1,'1x1x',212,84),#62
           (7,-1,'1x11',92,148),(7,0,'1xXX',148,124),(7,3,'1x11',252,100),(7,3,'1x11',68,100),#63-66
           (8,1,'1xXX',160,124),(8,2,'1x1x',300,180)]#67-68
-      possibleT=[0,3,7,8,9,16,17,22,38,42,47,53,61]
-      remainingT=[1,2,4,5,6,10,11,12,13,14,15,18,19,20,21,23,25,26,27,28,29,30,31,32,33,34,35,36,37,39,
-                  43,44,45,46,48,49,50,51,52,54,55,56,57,58,59,60,62,63,64,65,66,67,68]
-      #unavailableT=[24]
-      loseT=[40,41]
-      upstairsT=[27,32,33,42,45,47]
-
-      #choose orb order
-      orbs = [0,1,2,3]
-      spots = [-1,-1,-1,-1]
-      orbs_r = random.sample(orbs, 4)
-      xorb = 0
-      upstairs = True
       loseorb = 41
-      #if op_lose is set: Randomize lose orb locations and lose orb
-      if(op_lose.get()):
-            for losecash in loseT:
-                  remainingT.append(losecash)
-            remainingT.sort()
-            loseorb = random.randint(0,68)
-            if(loseorb in possibleT):
-                  possibleT.remove(loseorb)
-            else:
-                  remainingT.remove(loseorb)
-      #print('orbs : ')
-      #print(orbs_r)
 
-      #choose treasure location and check orb isn't needed for location
-      while(xorb < 4):
-      #      print('possibleT: ')
-      #      print(possibleT)
-            choiceOfT = random.randint(0,len(possibleT)-1)
-            spots[xorb] = possibleT[choiceOfT]
-            if(xorb==4):#remove when randomizing win orb
-                  break
-            #add new possibilities
-            if(upstairs and not(possibleT[choiceOfT] in upstairsT)):
-                  upstairs = False
-            del possibleT[choiceOfT]
-            additionsT = []
-            xT = 0
-            while(xT<len(remainingT)):
-                  valid = (Treasure[remainingT[xT]])[2]
-      #            print('valid : ' + valid)
-                  if(valid.count('x',orbs_r[xorb],orbs_r[xorb]+1)>0):
-      #                  print('x was found at ')
-      #                  print(remainingT[xT])
-                        xT+=1
-                  elif(valid.count('X',orbs_r[xorb],orbs_r[xorb]+1)>0):
-      #                  print('X was found at ')
-      #                  print(remainingT[xT])
-                        requiredorbcount = valid.count('1')
-                        if(valid.count('A')>0 and not upstairs):
-                              requiredorbcount += 1
-                        if(requiredorbcount==0):
-                              additionsT.append(remainingT.pop(xT))
-                        else:
-                              temporb = xorb-1
-                              while(temporb >= 0):
-                                    if(valid.count('1',orbs_r[temporb],orbs_r[temporb]+1)>0 or valid.count('A',orbs_r[temporb],orbs_r[temporb]+1)>0):
-                                          requiredorbcount-=1
-                                    temporb -= 1
-                              if(requiredorbcount<1):
-                                    additionsT.append(remainingT.pop(xT))
-                              else:
-                                    xT+=1
-                  elif(valid.count('1',orbs_r[xorb],orbs_r[xorb]+1)>0):
-      #                  print('1 was found at ')
-      #                  print(remainingT[xT])
-                        requiredorbcount = valid.count('1')-1
-                        if(valid.count('A')>0 and not upstairs):
-                              requiredorbcount += 1
-                        if(valid.count('X')>0):
-                              requiredorbcount += 1
-                              temporb = xorb-1
-                              while(temporb >= 0):
-                                    if(valid.count('X',orbs_r[temporb],orbs_r[temporb]+1)>0):
-                                          requiredorbcount -= 1
-                                          break
-                                    temporb -= 1
-                        temporb = xorb-1
-                        while(temporb >= 0):
-                              if(valid.count('1',orbs_r[temporb],orbs_r[temporb]+1)>0 or valid.count('A',orbs_r[temporb],orbs_r[temporb]+1)>0):
-                                    requiredorbcount -= 1
-                              temporb -= 1
-                        if(requiredorbcount < 1):
-                              additionsT.append(remainingT.pop(xT))
-                        else:
-                              xT+=1
-                  elif(valid.count('E',orbs_r[xorb],orbs_r[xorb]+1)>0):
-      #                  print('E was found at ')
-      #                  print(remainingT[xT])
-                        requiredorbcount = valid.count('E')-1
-                        temporb = xorb-1
-                        while(temporb >= 0):
-                              if(valid.count('E',orbs_r[temporb],orbs_r[temporb]+1)>0):
-                                    requiredorbcount-=1
-                              temporb -= 1
-                        if(requiredorbcount<1):
-                              additionsT.append(remainingT.pop(xT))
-                        else:
-                              xT+=1
-                  elif(valid.count('A',orbs_r[xorb],orbs_r[xorb]+1)>0):
-      #                  print('A was found at ')
-      #                  print(remainingT[xT])
-                        requiredorbcount = valid.count('1')
-                        temporb = xorb-1
-                        while(temporb >= 0):
-                              if(valid.count('1',orbs_r[temporb],orbs_r[temporb]+1)>0):
-                                    requiredorbcount-=1
-                              temporb -= 1
-                        if(requiredorbcount<1):
-                              additionsT.append(remainingT.pop(xT))
-                        else:
-                              xT+=1
-                  else:
-                        print('oops at xT = ')
-                        print(xT)
-                        print('and remainingT = ')
-                        print(remainingT[xT])
-                        xT+=1
-            #decide which previous locations should stay
-            if(len(additionsT) > 8):
-                  extraorb = random.randint(0,len(possibleT)-1)
-                  additionsT.append(possibleT.pop(extraorb))
-                  extraorb = random.randint(0,len(possibleT)-1)
-                  additionsT.append(possibleT.pop(extraorb))
-            else:
-                  orbsleft = 10 - len(additionsT)
-      #            print('orbsleft: ')
-      #            print(orbsleft)
-                  while(orbsleft > 0):
-                        extraorb = random.randint(0,len(possibleT)-1)
-                        additionsT.append(possibleT.pop(extraorb))
-                        orbsleft -= 1
-            possibleT.clear()
-            possibleT.extend(additionsT)
-            possibleT.sort()
-            xorb += 1
-
-      #used to check that this algroithm works
-      #print('orbs : ')
-      #print(orbs_r)
-      #print('spots: ')
-      #print(spots)
-
-      #include lose orb in orb list
-      orbs_r.append(10)
-      spots.append(loseorb)
-
-      extraTeleporters= [(-1,-2,296,144,1,-2,24,152),#win if op_allorbs is on
-                   (0,-3,296,144,-3,0,24,144),#teleport from lose
-                   (0,-2,296,144,-3,0,24,144)]#teleport from win
-
-      #once all set, create file and set all orbs and treasure
-      # Write ROOMS file, setting the orb possitions
-
-      oldSpots = spots
-      options = newlogic.RandomizerOptions()
+      options = logic.RandomizerOptions()
       options.seed = seed
-      spots = newlogic.getOrbLocations(options)
+      spots = logic.generateRandomSeed(options)
       for i in range(len(spots)):
             if spots[i] > 27:
                   spots[i] -= 1
@@ -198,16 +42,18 @@ def run_randomizer():
                   spots[i] -= 1
       spots.append(loseorb)
 
-      print(f'old spots: {oldSpots}, new spots: {spots}')
+      print(f'spots: {spots}')
 
       writefilename = 'Rooms_random_' + seed + '.xml'
       readfile = open('Rooms_randomBase.xml')
       writefile = open(writefilename, 'w')
       t = 0
       tcords = 'room x="'+str((Treasure[t])[0])+'" y="'+str((Treasure[t])[1])+'"'
-      gateatlose = op_lose.get()
+      if op_lose.get():
+            treasureEntity = 'orb_lose'
+      else:
+            treasureEntity = 'cash'
       gateforallorbs = op_allorbs.get()
-      newline = ''
       for line in readfile:
             writefile.write(line)
             if('room x="-1" y="-2"' in line):
@@ -216,13 +62,11 @@ def run_randomizer():
                   else:
                         newline = '<entity template="gate" x="296" y="144" destwx="0" destwy="-2" destrx="24" destry="152" />\n'
                   writefile.write(newline)
-            elif(gateatlose and ('room x="0" y="-3"' in line)):
+            elif('room x="0" y="-3"' in line):
                   newline = '<entity template="gate" x="296" y="144" destwx="-3" destwy="0" destrx="24" destry="144" />\n'
                   writefile.write(newline)
-                  gateatlose = False
             if(tcords in line):
                   if(t in spots):
-                        #whichorb = orbs_r[spots.index(t)] TODO: remove
                         whichorb = spots.index(t)
                         newline = '<entity template="orb_'
                         if(whichorb==0):
@@ -238,12 +82,12 @@ def run_randomizer():
                         newline += '" x="' + str((Treasure[t])[3]) + '" y="' + str((Treasure[t])[4]-4) + '" />\n'
                         writefile.write(newline)
                   else:
-                        newline = '<entity template="cash" x="' + str((Treasure[t])[3]) + '" y="' + str((Treasure[t])[4]) + '" />\n'
+                        newline = f'<entity template="{treasureEntity}" x="' + str((Treasure[t])[3]) + '" y="' + str((Treasure[t])[4]) + '" />\n'
                         writefile.write(newline)
                   t += 1
                   if(t < len(Treasure) and (Treasure[t])[0] == (Treasure[t-1])[0] and (Treasure[t])[1] == (Treasure[t-1])[1]):
                         if(t in spots):
-                              whichorb = orbs_r[spots.index(t)]
+                              whichorb = spots.index(t)
                               newline = '<entity template="orb_'
                               if(whichorb==0):
                                     newline += 'blue'
@@ -258,7 +102,7 @@ def run_randomizer():
                               newline += '" x="' + str((Treasure[t])[3]) + '" y="' + str((Treasure[t])[4]-4) + '" />\n'
                               writefile.write(newline)
                         else:
-                              newline = '<entity template="cash" x="' + str((Treasure[t])[3]) + '" y="' + str((Treasure[t])[4]) + '" />\n'
+                              newline = f'<entity template="{treasureEntity}" x="' + str((Treasure[t])[3]) + '" y="' + str((Treasure[t])[4]) + '" />\n'
                               writefile.write(newline)
                         t += 1
                   if(t < len(Treasure)):

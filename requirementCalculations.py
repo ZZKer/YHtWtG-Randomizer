@@ -1,12 +1,18 @@
 DEFAULT_SPAWN = "You Have to Start the Game Spawn"
 DEFAULT_REDORB = "Crimson Aura Pickup"
-DEFAULT_BLUEORB ="Cerulean Aura Pickup"
+DEFAULT_BLUEORB = "Cerulean Aura Pickup"
 DEFAULT_BOOTS = "Springheel Boots Pickup"
 DEFAULT_GLOVES = "Spider Gloves Pickup"
 DEFAULT_LOSE = "Consolation Prize Pickup-1"
 DEFAULT_WIN = "Eponymous Pickup"
 
 def reduceReqs(reqs):
+    """
+    Remove requirement values which represent a superset of another requirement.
+    Example: [3 (blue orb, red orb),7 (blue orb, red orb, boots)]
+          -> [3] (boots are not needed)
+
+    """
     reducedReqs = []
     reqs.sort()
     for req in reqs:
@@ -16,23 +22,41 @@ def reduceReqs(reqs):
                 add = False
                 break
             elif not req & ~ newReq:
-                newReq = req
                 add = False
                 break
         if add:
             reducedReqs = reducedReqs + [req]
     return reducedReqs
 
-def calculateTotalRequirements(newEdgeReqs, existingReqs):
-    nrNewReqs = len(newEdgeReqs)
-    nrOldReqs = len(existingReqs)
+def calculateTotalRequirements(newLocationReqs, currentLocationReqs):
+    """
+    Combines the requirements needed to reach the current location whith the requirements needed to move along an edge
+    in the graph to a new location.
+
+    :param newEdgeReqs: Requirements for moving from the current location to a new one
+    :param existingReqs: Requirements for reaching the current location
+    :return:
+    """
+    nrNewReqs = len(newLocationReqs)
+    nrOldReqs = len(currentLocationReqs)
     totalReqs = [0]*(nrNewReqs*nrOldReqs)
     for i in range(nrNewReqs):
         for j in range(nrOldReqs):
-            totalReqs[i*nrOldReqs+j] = newEdgeReqs[i] | existingReqs[j]
+            totalReqs[i*nrOldReqs+j] = newLocationReqs[i] | currentLocationReqs[j]
     return totalReqs
 
 def iterate(matrix, stateVector):
+    """
+    Does one iteration of the requirement calculation for all location. Calculating the requirements to reach all
+    locations on the map from a given spawn point can be done by using a stateVector with all locations set to [] or [-1] (impossible)
+    except for the start location itself, which should be set to [0] (no requirements). Afterwards repeatedly call
+    this method to make one movement along all possible edges in the graph simultaneously.
+    :param matrix: The matrix representing the logic graph for the game map
+    :param stateVector: The current requirement state. Should be initialized with a (...[],[0],[],...) where the [0]
+    represents the spawn location
+    :return: The updated state vector after moving along the edges of the graph. Feed this back into this method as
+    the new state vector to make multiple movements.
+    """
     ret = [[] for _ in range(len(stateVector))]
     for i in range(len(matrix)):
         for j in range(len(matrix)):
@@ -43,6 +67,9 @@ def iterate(matrix, stateVector):
     return ret
 
 def readTable(file):
+    """
+    Reads the logic graph matrix and the location labels from a file.
+    """
     nrRows = 0
     nrCols = 0
     with open(file) as tableFile:
@@ -78,24 +105,30 @@ def readTable(file):
     return table, labels
 
 
-def writeTable(writeFile, states, stateNames=None):
-    if isinstance(stateNames, str):
-        stateNames = getStateListFromFile(stateNames)
+def writeTable(writeFile, matrix, locationNames=None):
+    """
+    Writes a logic graph matrix to a file. Optionally allows writing location names as well.
+    """
+    if isinstance(locationNames, str):
+        stateNames = getStateListFromFile(locationNames)
     with open(writeFile, 'w') as writeFile:
-        if len(stateNames) > 0:
-            writeFile.write(";" + getTableLine(stateNames))
+        if len(locationNames) > 0:
+            writeFile.write(";" + getTableLine(locationNames))
             writeFile.write("\n")
 
-        for i in range(len(states)):
-            if len(stateNames) > i:
-                line = [stateNames[i]] + states[i]
+        for i in range(len(matrix)):
+            if len(locationNames) > i:
+                line = [locationNames[i]] + matrix[i]
             else:
-                line = [""] + states[i]
+                line = [""] + matrix[i]
             writeFile.write(getTableLine(line))
             writeFile.write("\n")
 
 
 def getTableLine(entries):
+    """
+    Helper for writing the matrix to a file
+    """
     writeLine = ""
     if len(entries) == 0:
         print("no entries to write")
@@ -110,6 +143,9 @@ def getTableLine(entries):
 
 
 def getTableEntry(entry):
+    """
+    Helper for writing the matrix to a file
+    """
     writeReq = ""
     if len(entry) == 0:
         return ""
@@ -131,6 +167,10 @@ def getTableEntry(entry):
 
 
 def getStateListFromFile(stateNameFile):
+    """
+    Reads the location names from a file (usually a location graph matrix file).
+    Probably not needed anymore since readTable also returns the location names
+    """
     stateNames = []
     with open(stateNameFile) as readFile:
         firstLineSplits = readFile.readline().split(";")
@@ -145,11 +185,17 @@ def getStateListFromFile(stateNameFile):
 
     return stateNames
 
-def getInitialState(stateList, startLocation = DEFAULT_SPAWN):
-    startLocationPosition = stateList.index(startLocation)
-    return [[] for _ in range(startLocationPosition)] + [[0]] + [[] for _ in range(len(stateList)-startLocationPosition-1)]
+def getInitialState(locationList, startLocation = DEFAULT_SPAWN):
+    """
+    Creates an initial state for the iterate function
+    """
+    startLocationPosition = locationList.index(startLocation)
+    return [[] for _ in range(startLocationPosition)] + [[0]] + [[] for _ in range(len(locationList)-startLocationPosition-1)]
 
 def findPoIs(locations):
+    """
+    Returns all locations which are not just room edges
+    """
     pois = []
     for loc in locations:
 
@@ -159,17 +205,26 @@ def findPoIs(locations):
     return pois
 
 
-def findFinalState(table, initialState):
+def findFinalState(matrix, initialState):
+    """
+    Calculates requirements to reach all locations on the map from an initial state
+    :param matrix: The location graph matrix
+    :param initialState: Usually should just have the start location set to [0] and the rest to []
+    :return: The complete list of requirements for all locations
+    """
     oldState = initialState
-    currentState = iterate(table,oldState)
+    currentState = iterate(matrix,oldState)
 
     while getTableLine(oldState) != getTableLine(currentState):
         oldState = currentState
-        currentState = iterate(table, oldState)
+        currentState = iterate(matrix, oldState)
 
     return currentState
 
 def findSubIndex(fullList, subList):
+    """
+    Helper method to easily select a subset from a row in the matrix
+    """
     indices = []
 
     for i in range(len(fullList)):
@@ -179,6 +234,14 @@ def findSubIndex(fullList, subList):
     return indices
 
 def reduceRequirementTable(table, labels, reducedLocations = None):
+    """
+    Calculates requirements to reach any location on the map from any other location and returns the entries for
+    the given set of locations. Can be used to precalculate the connections between all pickup locations + other
+    relevant locations (spawn, end, teleporter, etc.)
+    :param table: Location graph matrix
+    :param labels: Full list of Location names
+    :param reducedLocations: List of relevant locations
+    """
     if reducedLocations == None:
         reducedLocations = []
         for label in labels:

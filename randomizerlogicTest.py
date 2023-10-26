@@ -46,11 +46,11 @@ class RandomizerLogicTest(unittest.TestCase):
         self.assertEqual(logic.addPower((15,0), [1,2,3,4]), (15,0))
 
     def test_filterLocs(self):
-        self.assertEqual(logic.filterLocs([(0,0)],[0],[]),[(0,1)])
-        self.assertEqual(logic.filterLocs([(0, 0)], [0], [(0,1)]), [])
-        self.assertEqual(logic.filterLocs([(1, 0)], [0,1], [(1, 0)]), [(1,2)])
-        self.assertEqual(logic.filterLocs([(15, 3)], [1,2,15,3], []), [(15, 7)])
-        self.assertEqual(logic.filterLocs([(15,6),(0, 0),(1,1),(3,4)], [0,15,1,4], [(0,1),(2,0),(3,4),(15,8)]), [(15, 6),(1,5)])
+        self.assertEqual(logic.updateStates([(0,0)],[0],[]),[(0,1)])
+        self.assertEqual(logic.updateStates([(0, 0)], [0], [(0,1)]), [])
+        self.assertEqual(logic.updateStates([(1, 0)], [0,1], [(1, 0)]), [(1,2)])
+        self.assertEqual(logic.updateStates([(15, 3)], [1,2,15,3], []), [(15, 7)])
+        self.assertEqual(logic.updateStates([(15,6),(0, 0),(1,1),(3,4)], [0,15,1,4], [(0,1),(2,0),(3,4),(15,8)]), [(15, 6),(1,5)])
 
     def test_findSolution(self):
         testMap = calc.readTable("logic_graphs/reduced.csv")[0]
@@ -66,9 +66,9 @@ class RandomizerLogicTest(unittest.TestCase):
         self.assertEqual(logic.findSolution(testMap, spawnLocation, orbs, end), False)
 
     @patch('randomizerlogic.selectOrbLocations')
-    def test_getOrbLocations(self, orbSelectionMock):
+    def test_generateRandomSeed(self, orbSelectionMock):
         orbSelectionMock.return_value = [3, 63, 31, 69]
-        self.assertEqual(logic.getOrbLocations(None), [3,63,31,69])
+        self.assertEqual(logic.generateRandomSeed(None), [3,63,31,69])
         
     def test_selectOrbLocations(self):
         random.seed(0)
