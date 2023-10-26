@@ -186,7 +186,7 @@ mainwindow.title('You Have To Randomize The Game v1.3')
 op_allorbs = BooleanVar()   #Option to require all orbs - TODO-------------------------------------------------------------
 op_lose = BooleanVar()      #Option to randomize lose orb
 check_allorbs = Checkbutton(mainwindow, text='Require All Orbs', variable=op_allorbs, command=set_setting_allorbs)
-check_lose = Checkbutton(mainwindow, text='Randomize Lose Orb', variable=op_lose, command=set_setting_lose)
+check_lose = Checkbutton(mainwindow, text='Replace Treasure with Lose', variable=op_lose, command=set_setting_lose)
 check_allorbs.grid(row=0, sticky=W)
 check_lose.grid(row=1, sticky=W)
 #Settings Seed: This is the seed used for your settings
