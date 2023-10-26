@@ -1,21 +1,23 @@
-## THIS IS THE BETA. THERE WILL BE BUGS.
-
 Thank you for trying out the You Have To Win The Game randomizer!
 This is version 1.3.
-This was created by ZZKylie / ZZKer.
-If you have any questions or suggestions, please contact me on Discord @ ZZKer#1962.
+This was originally created by ZZKer and extended by Spontanicus.
+If you have any questions or suggestions, feel free to contact me on discord @Spontanicus.
 If you find any seeds that don't work, please use this github to report it as an Issue.
 
 ## Version features
 
 #### 1.3:
- -  Graphical User Interface for ease of use
- -  Option to require all orbs to win
- -  Option to randomize Lose Orb and include "Consolation Prize" in treasure list
- -  Settings Seed to share your settings with others (will be more helpful as more options are added)
- -  Seed can now be any alpha-numeric string, not just numbers
- -  More treasure locations added (68/70 locations)
- -  Reworked logic when placing items before the drop at the start
+ - **Graphical User Interface for ease of use**
+ - **Complete rework of the randomizer logic**.
+Now uses a graph containing all locations on the map to look for a path from the spawn to the end. This will make
+including other randomization options a lot easier.
+ - This version assumes the use of glitches and may contain softlocks if you don't go right before dropping 
+down in the beginning (both will be changed later)
+ - All treasure except the ones in _Consolation Prize_ are available (68/70)
+ - Added option to require all orbs to win
+ - Added option to replace all other treasure with lose orbs
+ - Settings Seed to share your settings with others (will be more helpful as more options are added)
+ - Seed can now be any alpha-numeric string, not just numbers
 
 #### 1.2:
  -  Orbs are now randomized with most treasures (66/70 locations)
@@ -38,7 +40,10 @@ If you find any seeds that don't work, please use this github to report it as an
  1. Make sure Python is installed
  2. Make sure You Have to Win the Game on Steam is installed and played at least once (to initialize folders)
  3. Unzip YHtWtG_Campaign.zip into C:\Users\\\[your user name\]\Documents\my games\You Have to Win the Game\Maps
- 4. Place RandomizeYHTWTG.py, randomBase.map, & Rooms_randomBase.xml into the same folder as above
+ 4. Place RandomizeYHTWTG.py, randomBase.map, Rooms_randomBase.xml, randomizerLogic.py, and the logic_graphs 
+folder into the same directory as above
+    - Alternatively you can place these files in another folder and transfer the randomBase.map (only once) together 
+with Rooms_random_{your_seed}.xml and random_{your_seed}.gam (for every generated seed) to the maps folder later
  -  That's it! :D
 
 ## To Run:
@@ -49,12 +54,14 @@ If you find any seeds that don't work, please use this github to report it as an
 
 ## Options Explaination:
  -  Require All Orbs: All 4 orbs are required to reach the Win orb.
- -  Randomize Lose Orb: Chooses a random location for the Lose orb and adds the two treasure locations in "Consolation Prize" to possible orb locations.
+ -  Replace Treasure with Lose: Instead of money bags, all regular treasure is replaced with lose orbs.
 
 ## The Future:
- - [ ] teleporter randomization
- - [ ] room randomization
+ - [ ] logic options for allowing/excluding glitches
  - [ ] start randomization
- - [ ] magic word randomization?
- - [ ] maybe even bell and enemy randomization
- - [ ] Hardmode and glitch logic options
+ - [ ] more treasure locations
+ - [ ] teleporter randomization
+ - [ ] magic word randomization
+ - [ ] bell and enemy randomization (maybe)
+ - [ ] replace rooms with Spicy rooms (maybe)
+ - [ ] room randomization (maybe, really difficult)
