@@ -1,5 +1,5 @@
-import fileinput
 import random
+import string
 import tkinter
 import randomizerlogic as logic
 from tkinter import *
@@ -9,6 +9,9 @@ from tkinter import *
 def run_randomizer():
       # First, get the seed
       seed = eseed.get()
+      if seed == None or len(seed) == 0:
+            random.seed()
+            seed = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
       random.seed(seed)
 
       Treasure=[(-10,3,'xxxx',292,36),#0
@@ -43,7 +46,6 @@ def run_randomizer():
       spots.append(loseorb)
 
       print(f'spots: {spots}')
-
       writefilename = 'Rooms_random_' + seed + '.xml'
       readfile = open('Rooms_randomBase.xml')
       writefile = open(writefilename, 'w')
