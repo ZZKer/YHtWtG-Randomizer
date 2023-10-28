@@ -1,6 +1,6 @@
 from enum import Enum
 import random
-import requirementCalculations as calc
+from logic import requirementcalculations as calc
 
 DEFAULT_SPAWN = 27
 DEFAULT_END = 43
@@ -57,7 +57,7 @@ def generateRandomSeed(options):
 
     random.seed(options.seed)
 
-    connectionTable, labels = calc.readTable("logic_graphs/reduced.csv")
+    connectionTable, labels = calc.readTable("logic/reduced_map.csv")
 
     while True:
         spawnLocation = selectSpawnLocation()
@@ -159,7 +159,6 @@ def findSolution(table, spawn, orbs, end):
     visitedLocations = []
     solution = None
     while not isLocationInList(currentLocations, end) and len(currentLocations) > 0:
-        print(currentLocations)
         loc = currentLocations.pop()
         visitedLocations += [loc]
 

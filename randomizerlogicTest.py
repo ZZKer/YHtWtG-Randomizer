@@ -1,8 +1,7 @@
 import unittest
 from unittest.mock import patch
 import random
-import randomizerlogic as logic
-import requirementCalculations as calc
+from logic import randomizerlogic as logic, requirementcalculations as calc
 
 
 class RandomizerLogicTest(unittest.TestCase):
@@ -34,10 +33,10 @@ class RandomizerLogicTest(unittest.TestCase):
 
     def test_getLocationsRequirements(self):
         locationList = [[0],[1],[2,3],[4,5,6],[0]]
-        self.assertEquals(logic.getLocationRequirements(locationList, [0]),[(0,[0])])
-        self.assertEquals(logic.getLocationRequirements(locationList, [1,2]),[(1,[1]),(2,[2,3])])
-        self.assertEquals(logic.getLocationRequirements(locationList, [3,4]),[(3,[4,5,6]),(4,[0])])
-        self.assertEquals(logic.getLocationRequirements(locationList, [0, 4]), [(0, [0]), (4, [0])])
+        self.assertEqual(logic.getLocationRequirements(locationList, [0]),[(0,[0])])
+        self.assertEqual(logic.getLocationRequirements(locationList, [1,2]),[(1,[1]),(2,[2,3])])
+        self.assertEqual(logic.getLocationRequirements(locationList, [3,4]),[(3,[4,5,6]),(4,[0])])
+        self.assertEqual(logic.getLocationRequirements(locationList, [0, 4]), [(0, [0]), (4, [0])])
 
     def test_addPower(self):
         self.assertEqual(logic.addPower((0,0),[0]),(0,1))
@@ -53,7 +52,7 @@ class RandomizerLogicTest(unittest.TestCase):
         self.assertEqual(logic.updateStates([(15,6),(0, 0),(1,1),(3,4)], [0,15,1,4], [(0,1),(2,0),(3,4),(15,8)]), [(15, 6),(1,5)])
 
     def test_findSolution(self):
-        testMap = calc.readTable("logic_graphs/reduced.csv")[0]
+        testMap = calc.readTable("logic/reduced_map.csv")[0]
         spawnLocation = (logic.DEFAULT_SPAWN,112)
         orbs = [logic.DEFAULT_BLUE_ORB, logic.DEFAULT_RED_ORB, logic.DEFAULT_BOOTS, logic.DEFAULT_GLOVES]
         end = logic.DEFAULT_END
@@ -65,10 +64,10 @@ class RandomizerLogicTest(unittest.TestCase):
         orbs = [17, 57, 22, 64]
         self.assertEqual(logic.findSolution(testMap, spawnLocation, orbs, end), False)
 
-    @patch('randomizerlogic.selectOrbLocations')
+    @patch('logic.randomizerlogic.selectOrbLocations')
     def test_generateRandomSeed(self, orbSelectionMock):
         orbSelectionMock.return_value = [3, 63, 31, 69]
-        self.assertEqual(logic.generateRandomSeed(None), [3,63,31,69])
+        self.assertEqual(logic.generateRandomSeed(logic.RandomizerOptions()), [3,63,31,69])
         
     def test_selectOrbLocations(self):
         random.seed(0)

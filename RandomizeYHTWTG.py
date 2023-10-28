@@ -1,7 +1,7 @@
 import random
 import string
 import tkinter
-import randomizerlogic as logic
+from logic import randomizerlogic as logic
 from tkinter import *
 
 # Runs the randomizer code based on the given seed.
