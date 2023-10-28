@@ -1,7 +1,8 @@
 Thank you for trying out the You Have To Win The Game randomizer!
 This is version 1.3.
 This was originally created by ZZKer and extended by Spontanicus.
-If you have any questions or suggestions, feel free to contact me on discord @Spontanicus.
+If you have any questions or suggestions, feel free to contact me on discord @Spontanicus
+or better yet, join the Win the [Game community server](https://discord.com/invite/bZs99rY).
 If you find any seeds that don't work, please use this github to report it as an Issue.
 
 ## Version features
@@ -40,14 +41,13 @@ down in the beginning (both will be changed later)
  1. Make sure Python is installed
  2. Make sure You Have to Win the Game on Steam is installed and played at least once (to initialize folders)
  3. Unzip YHtWtG_Campaign.zip into C:\Users\\\[your user name\]\Documents\my games\You Have to Win the Game\Maps
- 4. Place RandomizeYHTWTG.py, randomBase.map, Rooms_randomBase.xml, randomizerLogic.py, and the logic_graphs 
-folder into the same directory as above
+ 4. Extract the contents of the release archive to the Maps folder as well (same as in previous step)
     - Alternatively you can place these files in another folder and transfer the randomBase.map (only once) together 
 with Rooms_random_{your_seed}.xml and random_{your_seed}.gam (for every generated seed) to the maps folder later
  -  That's it! :D
 
 ## To Run:
- 1. Double click the .py file to bring up the user interface.
+ 1. Execute RandomizeYHTWTG.py to bring up the user interface.
  2. Check the options you want and enter the seed in the "Randomizer Seed" box.
  3. Click the "Randomize" button to create the randomized file.
  4. The new map will appear in your map list in-game.
