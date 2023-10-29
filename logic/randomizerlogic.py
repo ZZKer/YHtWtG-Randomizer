@@ -20,17 +20,48 @@ class TPShuffleAmount(Enum):
     MORE = 1
     ALL = 2
 
-class RandomizerOptions(object):
-    shuffleSpawn = False
-    requireAllOrbs = False
-    tpMode = TpShuffleMode.NORMAL
-    tpAmount = TPShuffleAmount.REGULAR
-    hideTps = False
-    hidePowerups = False
-    seed = None
+class DifficultyOptions(object):
+    startWithBlueOrb = False
+    startWithRedOrb = False
+    startWithBoots = False
+    startWithGloves = False
+    spikejumps = False
+    triplejumps = False
+    extendedjumps = False
 
-def selectSpawnLocation():
-    return (27,112)
+class RandomizerOptions(object):
+    shuffleSpawn = False                    #TODO: Not supported yet
+    requireAllOrbs = False                  #TODO: Not supported yet
+    tpMode = TpShuffleMode.NORMAL           #TODO: Not supported yet
+    tpAmount = TPShuffleAmount.REGULAR      #TODO: Not supported yet
+    hideTps = False                         #TODO: Not supported yet
+    hidePowerups = False                    #TODO: Not supported yet
+    seed = None
+    difficultyOptions = DifficultyOptions() #TODO: Not supported yet
+
+
+def selectSpawnState(options):
+    startRequirements = buildSpawnRequirements(options.difficultyOptions)
+    spawnLocation = selectSpawnLocation(options.shuffleSpawn)
+    return (spawnLocation, startRequirements)
+
+def selectSpawnLocation(shuffleSpawn):
+    """
+    Selects a valid spawn location
+    TODO: add spawn shuffle functionality
+    :param shuffleSpawn: Whether or not the spawn location should be shuffled with treasures
+    :return: The spawn location to use
+    """
+    return DEFAULT_SPAWN
+
+def buildSpawnRequirements(difficultyOptions):
+    return 1 * difficultyOptions.startWithBlueOrb + \
+        2 * difficultyOptions.startWithRedOrb + \
+        4 * difficultyOptions.startWithBoots + \
+        8 * difficultyOptions.startWithGloves + \
+        16 * difficultyOptions.spikejumps + \
+        32 * difficultyOptions.triplejumps + \
+        64 * difficultyOptions.extendedjumps
 
 def selectOrbLocations(nrLocs = 71, excludeLocs = [27, 43]):
     """
@@ -60,11 +91,11 @@ def generateRandomSeed(options):
     connectionTable, labels = calc.readTable("logic/reduced_map.csv")
 
     while True:
-        spawnLocation = selectSpawnLocation()
-        orbLocations = selectOrbLocations()
+        spawnState = selectSpawnState(options)
         endLocation = selectEndLocation()
+        orbLocations = selectOrbLocations(excludeLocs=[spawnState[0], endLocation])
 
-        solution = findSolution(connectionTable, spawnLocation, orbLocations, endLocation)
+        solution = findSolution(connectionTable, spawnState, orbLocations, endLocation)
         if solution:
             break
 

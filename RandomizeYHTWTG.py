@@ -34,8 +34,8 @@ def run_randomizer():
           (7,-1,'1x11',92,148),(7,0,'1xXX',148,124),(7,3,'1x11',252,100),(7,3,'1x11',68,100),#63-66
           (8,1,'1xXX',160,124),(8,2,'1x1x',300,180)]#67-68
       loseorb = 41
-
       options = logic.RandomizerOptions()
+      options.difficultyOptions = diffChoiceDict[diffChoice.get()]
       options.seed = seed
       spots = logic.generateRandomSeed(options)
       for i in range(len(spots)):
@@ -179,31 +179,58 @@ def set_setting_lose():
             esettings.delete(0,tkinter.END)
             esettings.insert(0,settingsstring)
 
+def setSettingDifficulty():
+      print(diffChoice.get())
+
+
+diffOptionGlitchless = logic.DifficultyOptions()
+diffOptionUnrestricted = logic.DifficultyOptions()
+diffOptionUnrestricted.spikejumps = True
+diffOptionUnrestricted.triplejumps = True
+diffOptionUnrestricted.extendedjumps = True
+
+diffChoiceDict = {'unrestricted': diffOptionUnrestricted, 'glitchless': diffOptionGlitchless}
+
 #create the gui
 mainwindow=tkinter.Tk()
 mainwindow.title('You Have To Randomize The Game v1.3')
+mainframe = tkinter.Frame(mainwindow)
+mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
 #Options
 op_allorbs = BooleanVar()   #Option to require all orbs - TODO-------------------------------------------------------------
 op_lose = BooleanVar()      #Option to randomize lose orb
-check_allorbs = Checkbutton(mainwindow, text='Require All Orbs', variable=op_allorbs, command=set_setting_allorbs)
-check_lose = Checkbutton(mainwindow, text='Replace Treasure with Lose', variable=op_lose, command=set_setting_lose)
+op_difficulty = logic.DifficultyOptions()
+check_allorbs = Checkbutton(mainframe, text='Require All Orbs', variable=op_allorbs, command=set_setting_allorbs)
+check_lose = Checkbutton(mainframe, text='Replace Treasure with Lose', variable=op_lose, command=set_setting_lose)
 check_allorbs.grid(row=0, sticky=W)
 check_lose.grid(row=1, sticky=W)
+
+difficultySettings = tkinter.Frame(mainframe)
+diffChoice = StringVar()
+diffChoice.set('unrestricted')
+diff_unrestricted = tkinter.Radiobutton(difficultySettings, text='Unrestricted', variable=diffChoice, value='unrestricted', command=setSettingDifficulty)
+diff_unrestricted.grid(row=0, sticky=W)
+diff_glitchless = tkinter.Radiobutton(difficultySettings, text='Glitchless', variable=diffChoice, value='glitchless', command=setSettingDifficulty)
+diff_glitchless.grid(row=1, sticky=W)
+#diff_custom = tkinter.Radiobutton(difficultySettings, text='Custom', variable=diffChoice, value=2, command=printChoice)
+#diff_custom.grid(row=2, sticky=W)
+difficultySettings.grid(row=2, column=0, sticky=W)
+
 #Settings Seed: This is the seed used for your settings
-tkinter.Label(mainwindow, text='Settings Seed').grid(row=2, column=0, sticky=W)
-esettings = tkinter.Entry(mainwindow)
-esettings.grid(row=2, column=1, sticky=W)
-settingbutton=tkinter.Button(mainwindow, text='Set Settings', width=25, command=set_settings)
-settingbutton.grid(row=2, column=2, sticky=W)
+tkinter.Label(mainframe, text='Settings Seed').grid(row=3, column=0, sticky=W)
+esettings = tkinter.Entry(mainframe)
+esettings.grid(row=3, column=1, sticky=W)
+settingbutton=tkinter.Button(mainframe, text='Set Settings', width=25, command=set_settings)
+settingbutton.grid(row=3, column=2, sticky=W)
 #Randomizer Seed: This is the seed used by the randomizer
-tkinter.Label(mainwindow, text='Randomizer Seed').grid(row=3, column=0, sticky=W)
-eseed = tkinter.Entry(mainwindow)
-eseed.grid(row=3, column=1, sticky=W)
-gobutton=tkinter.Button(mainwindow, text='Randomize', width=25, command=run_randomizer)
-gobutton.grid(row=3, column=2, sticky=W)
+tkinter.Label(mainframe, text='Randomizer Seed').grid(row=4, column=0, sticky=W)
+eseed = tkinter.Entry(mainframe)
+eseed.grid(row=4, column=1, sticky=W)
+gobutton=tkinter.Button(mainframe, text='Randomize', width=25, command=run_randomizer)
+gobutton.grid(row=4, column=2, sticky=W)
 #Output: This tells the user what the program is doing
-output_label = tkinter.Label(mainwindow, text='Click "Randomize" to start randomizer')
-output_label.grid(row=4, sticky=W)
+output_label = tkinter.Label(mainframe, text='Click "Randomize" to start randomizer')
+output_label.grid(row=5, sticky=W)
 #main loop
 mainwindow.mainloop()
 
