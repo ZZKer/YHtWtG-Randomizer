@@ -9,16 +9,19 @@ DEFAULT_RED_ORB = 63
 DEFAULT_BOOTS = 31
 DEFAULT_GLOVES = 69
 
+
 class TpShuffleMode(Enum):
     NORMAL = 0
     SHUFFLE_EXITS = 1
     SHUFFLE_ENTRYS = 2
     SHUFFLE_BOTH = 3
 
+
 class TPShuffleAmount(Enum):
     REGULAR = 0
     MORE = 1
     ALL = 2
+
 
 class DifficultyOptions(object):
     startWithBlueOrb = False
@@ -29,21 +32,28 @@ class DifficultyOptions(object):
     triplejumps = False
     extendedjumps = False
 
+    def __str__(self):
+        return (f'Spike Jumps: {self.spikejumps}\n'
+                f'Triple Jumps: {self.triplejumps}\n'
+                f'Extended Jumps: {self.extendedjumps}')
+
+
 class RandomizerOptions(object):
-    shuffleSpawn = False                    #TODO: Not supported yet
-    requireAllOrbs = False                  #TODO: Not supported yet
-    tpMode = TpShuffleMode.NORMAL           #TODO: Not supported yet
-    tpAmount = TPShuffleAmount.REGULAR      #TODO: Not supported yet
-    hideTps = False                         #TODO: Not supported yet
-    hidePowerups = False                    #TODO: Not supported yet
+    shuffleSpawn = False  # TODO: Not supported yet
+    requireAllOrbs = False  # TODO: Not supported yet
+    tpMode = TpShuffleMode.NORMAL  # TODO: Not supported yet
+    tpAmount = TPShuffleAmount.REGULAR  # TODO: Not supported yet
+    hideTps = False  # TODO: Not supported yet
+    hidePowerups = False  # TODO: Not supported yet
     seed = None
-    difficultyOptions = DifficultyOptions() #TODO: Not supported yet
+    difficultyOptions = DifficultyOptions()  # TODO: Not supported yet
 
 
 def selectSpawnState(options):
     startRequirements = buildSpawnRequirements(options.difficultyOptions)
     spawnLocation = selectSpawnLocation(options.shuffleSpawn)
     return (spawnLocation, startRequirements)
+
 
 def selectSpawnLocation(shuffleSpawn):
     """
@@ -54,6 +64,7 @@ def selectSpawnLocation(shuffleSpawn):
     """
     return DEFAULT_SPAWN
 
+
 def buildSpawnRequirements(difficultyOptions):
     return 1 * difficultyOptions.startWithBlueOrb + \
         2 * difficultyOptions.startWithRedOrb + \
@@ -63,7 +74,8 @@ def buildSpawnRequirements(difficultyOptions):
         32 * difficultyOptions.triplejumps + \
         64 * difficultyOptions.extendedjumps
 
-def selectOrbLocations(nrLocs = 71, excludeLocs = [27, 43]):
+
+def selectOrbLocations(nrLocs=71, excludeLocs=[27, 43]):
     """
     Selects a random set of unique locations for the orbs.
     :param nrLocs:
@@ -72,14 +84,16 @@ def selectOrbLocations(nrLocs = 71, excludeLocs = [27, 43]):
     """
     orbs = []
     while len(orbs) < 4:
-        nextOrb = random.randint(0,nrLocs-1)
+        nextOrb = random.randint(0, nrLocs - 1)
         if nextOrb not in excludeLocs and nextOrb not in orbs:
             orbs += [nextOrb]
 
     return orbs
 
+
 def selectEndLocation():
     return 43
+
 
 def generateRandomSeed(options):
     if not isinstance(options, RandomizerOptions):
@@ -101,12 +115,14 @@ def generateRandomSeed(options):
 
     return orbLocations
 
+
 def isLocationInList(locationList, location):
     for loc in locationList:
         if loc[0] == location:
             return True
 
     return False
+
 
 def getLocationRequirements(locationList, filterList):
     """
@@ -119,6 +135,7 @@ def getLocationRequirements(locationList, filterList):
         locReqList += [(filterIndex, locationList[filterIndex])]
 
     return locReqList
+
 
 def getReachableLocs(locationList, fulfilledRequirements):
     """
@@ -135,6 +152,7 @@ def getReachableLocs(locationList, fulfilledRequirements):
 
     return reachableLocs
 
+
 def fulfillsRequirements(reqList, fulfilledReqs):
     """
     Checks if a requirement value fulfills any of the requirements in a given list
@@ -146,6 +164,7 @@ def fulfillsRequirements(reqList, fulfilledReqs):
             return True
 
     return False
+
 
 def updateStates(locList, orbLocs, excludeLocs):
     """
@@ -162,6 +181,7 @@ def updateStates(locList, orbLocs, excludeLocs):
             newLocs += [loc]
     return newLocs
 
+
 def addPower(loc, orbLocs):
     """
     Adds the requirement fulfilled by a powerup to the given location state and returns it
@@ -173,6 +193,7 @@ def addPower(loc, orbLocs):
         if loc[0] == orbLocs[i]:
             return (loc[0], loc[1] | 2 ** i)
     return loc
+
 
 def findSolution(table, spawn, orbs, end):
     """
