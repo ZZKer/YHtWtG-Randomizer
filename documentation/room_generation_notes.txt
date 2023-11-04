@@ -1,0 +1,6 @@
+Coordinate System:
+- 1 Pixel = 1 Unit
+- Each tile is 8*8 Pixel
+- Each Screen is 40*24 tiles large
+- Origin is the top left corner with x-axis towards the right, y-axis downwards.
+- Entities coordinates are based on their center
