@@ -165,42 +165,38 @@ def run_randomizer():
 
 
 def set_settings():
-    settingsstring = str(esettings.get())
-    if (settingsstring.find('A') > -1):
+    settingsString = settingsSeedString.get()
+    if (settingsString.find('A') > -1):
+        settingsString = settingsString.replace('A','')
         check_allorbs.select()
     else:
         check_allorbs.deselect()
-    if (settingsstring.find('L') > -1):
+    if (settingsString.find('L') > -1):
+        settingsString = settingsString.replace('L', '')
         check_lose.select()
     else:
         check_lose.deselect()
 
+    if settingsString.isnumeric():
+        diffChoice.set('custom')
+        diffOptionCustom.setFromRequirementValue(int(settingsString))
 
-def set_setting_allorbs():
-    settingsstring = str(esettings.get())
-    if (op_allorbs.get()):
-        if (settingsstring.find('A') < 0):
-            esettings.insert(0, 'A')
-    else:
-        settingsstring = settingsstring.replace('A', '')
-        esettings.delete(0, tkinter.END)
-        esettings.insert(0, settingsstring)
+    setSettingsString()
 
 
-def set_setting_lose():
-    settingsstring = str(esettings.get())
-    if (op_lose.get()):
-        if (settingsstring.find('L') < 0):
-            esettings.insert(settingsstring.find('A') + 1, 'L')
-    else:
-        settingsstring = settingsstring.replace('L', '')
-        esettings.delete(0, tkinter.END)
-        esettings.insert(0, settingsstring)
+
+def getDifficultyString():
+    return str(diffChoiceDict[diffChoice.get()].toRequirementValue()).rjust(3,'0')
 
 
-def setSettingDifficulty():
-    pass
-
+def setSettingsString():
+    settingsString = ''
+    if op_allorbs.get():
+        settingsString += 'A'
+    if op_lose.get():
+        settingsString += 'L'
+    settingsString += getDifficultyString()
+    settingsSeedString.set(settingsString)
 
 class CustomDifficultyWindow(Toplevel):
 
@@ -213,21 +209,21 @@ class CustomDifficultyWindow(Toplevel):
         self.settings = initialSettings
 
         self.spikeJumpVar = BooleanVar()
-        self.spikeJumpVar.set(self.settings.spikejumps)
+        self.spikeJumpVar.set(self.settings.spikeJumps)
         self.tripleJumpVar = BooleanVar()
-        self.tripleJumpVar.set(self.settings.triplejumps)
+        self.tripleJumpVar.set(self.settings.tripleJumps)
         self.extendedJumpVar = BooleanVar()
-        self.extendedJumpVar.set(self.settings.extendedjumps)
+        self.extendedJumpVar.set(self.settings.extendedJumps)
 
         difficultyFrame = Frame(self)
         difficultyFrame.grid(row=0, column=0, sticky=(N, E, S, W), padx=5, pady=5)
-        checkSpikeJumps = Checkbutton(difficultyFrame, text='Spikejumps', variable=self.spikeJumpVar, command=self.updateSettings)
+        checkSpikeJumps = Checkbutton(difficultyFrame, text='Spikejumps', variable=self.spikeJumpVar, command=self.updateDifficultySettings)
         checkSpikeJumps.grid(row=0, column=0, sticky=W)
         checkTripleJumps = Checkbutton(difficultyFrame, text='Ground Grace Storage (aka Triple Jumps)',
-                                               variable=self.tripleJumpVar, command=self.updateSettings)
+                                               variable=self.tripleJumpVar, command=self.updateDifficultySettings)
         checkTripleJumps.grid(row=1, column=0, sticky=W)
         checkExtendedJumps = Checkbutton(difficultyFrame, text='Refire Grace Storage (aka Extended Jumps)',
-                                                 variable=self.extendedJumpVar, command=self.updateSettings)
+                                                 variable=self.extendedJumpVar, command=self.updateDifficultySettings)
         checkExtendedJumps.grid(row=2, column=0, sticky=W)
 
         closeButton = tkinter.Button(difficultyFrame, text='Close', command=self.close,)
@@ -239,15 +235,15 @@ class CustomDifficultyWindow(Toplevel):
         self.resizable(False, False)
         self.grab_set()
 
-    def updateSettings(self):
+    def updateDifficultySettings(self):
         self.settings.startWithBlueOrb = False
         self.settings.startWithRedOrb = False
         self.settings.startWithBoots = False
         self.settings.startWithGloves = False
 
-        self.settings.spikejumps = self.spikeJumpVar.get()
-        self.settings.triplejumps = self.tripleJumpVar.get()
-        self.settings.extendedjumps = self.extendedJumpVar.get()
+        self.settings.spikeJumps = self.spikeJumpVar.get()
+        self.settings.tripleJumps = self.tripleJumpVar.get()
+        self.settings.extendedJumps = self.extendedJumpVar.get()
 
     def close(self):
         if self.onclose != None:
@@ -258,15 +254,19 @@ class CustomDifficultyWindow(Toplevel):
 
 
 def openCustomDifficultyWindow():
-    customDifficultyWindow = CustomDifficultyWindow(mainwindow, diffOptionCustom, setSettingDifficulty)
+    customDifficultyWindow = CustomDifficultyWindow(mainwindow, diffOptionCustom)
     customDifficultyWindow.wait_window()
+
+    setSettingsString()
+
+
 
 
 diffOptionGlitchless = logic.DifficultyOptions()
 diffOptionUnrestricted = logic.DifficultyOptions()
-diffOptionUnrestricted.spikejumps = True
-diffOptionUnrestricted.triplejumps = True
-diffOptionUnrestricted.extendedjumps = True
+diffOptionUnrestricted.spikeJumps = True
+diffOptionUnrestricted.tripleJumps = True
+diffOptionUnrestricted.extendedJumps = True
 diffOptionCustom = logic.DifficultyOptions()
 
 diffChoiceDict = {'unrestricted': diffOptionUnrestricted, 'glitchless': diffOptionGlitchless,
@@ -281,8 +281,8 @@ mainframe.grid(column=0, row=0, sticky=(N,W,E), padx=5, pady=5)
 op_allorbs = BooleanVar()  # Option to require all orbs - TODO-------------------------------------------------------------
 op_lose = BooleanVar()  # Option to randomize lose orb
 op_difficulty = logic.DifficultyOptions()
-check_allorbs = Checkbutton(mainframe, text='Require All Orbs', variable=op_allorbs, command=set_setting_allorbs)
-check_lose = Checkbutton(mainframe, text='Replace Treasure with Lose', variable=op_lose, command=set_setting_lose)
+check_allorbs = Checkbutton(mainframe, text='Require All Orbs', variable=op_allorbs, command=setSettingsString)
+check_lose = Checkbutton(mainframe, text='Replace Treasure with Lose', variable=op_lose, command=setSettingsString)
 check_allorbs.grid(row=0, sticky=W)
 check_lose.grid(row=1, sticky=W)
 
@@ -292,10 +292,10 @@ diffChoice.set('unrestricted')
 diffLabel = Label(difficultySettings, text='Difficulty:')
 diffLabel.grid(row=0, sticky=W)
 diffUnrestricted = Radiobutton(difficultySettings, text='Unrestricted', variable=diffChoice,
-                                        value='unrestricted', command=setSettingDifficulty)
+                                        value='unrestricted', command=setSettingsString)
 diffUnrestricted.grid(row=1, sticky=W, padx=(10,0))
 diffGlitchless = Radiobutton(difficultySettings, text='Glitchless', variable=diffChoice, value='glitchless',
-                                      command=setSettingDifficulty)
+                                      command=setSettingsString)
 diffGlitchless.grid(row=2, sticky=W, padx=(10,0))
 diffCustom = Radiobutton(difficultySettings, text='Custom', variable=diffChoice, value='custom',
                                   command=openCustomDifficultyWindow)
@@ -309,8 +309,9 @@ ttk.Separator(mainwindow).grid(row=1, sticky=(W,E))
 seedframe = Frame(mainwindow)
 seedframe.grid(row=2, column=0, sticky=(S,W,E), padx=5, pady=5)
 # Settings Seed: This is the seed used for your settings
+settingsSeedString = StringVar()
 Label(seedframe, text='Settings Seed:').grid(row=0, column=0)
-esettings = Entry(seedframe)
+esettings = Entry(seedframe, textvariable=settingsSeedString)
 esettings.grid(row=0, column=1, sticky=W, padx=5)
 settingbutton = tkinter.Button(seedframe, text='Set Settings', width=15, command=set_settings)
 settingbutton.grid(row=0, column=2, sticky=W)
@@ -325,6 +326,7 @@ output_label = Label(mainwindow, text='Click "Randomize" to start randomizer')
 output_label.grid(row=3, sticky=W)
 # main loop
 mainwindow.resizable(False, False)
+setSettingsString()
 mainwindow.mainloop()
 
 # Teleporters= [(-7,3,120,160,-9,4,304,64),#0

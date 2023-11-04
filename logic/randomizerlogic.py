@@ -28,14 +28,32 @@ class DifficultyOptions(object):
     startWithRedOrb = False
     startWithBoots = False
     startWithGloves = False
-    spikejumps = False
-    triplejumps = False
-    extendedjumps = False
+    spikeJumps = False
+    tripleJumps = False
+    extendedJumps = False
 
     def __str__(self):
-        return (f'Spike Jumps: {self.spikejumps}\n'
-                f'Triple Jumps: {self.triplejumps}\n'
-                f'Extended Jumps: {self.extendedjumps}')
+        return (f'Spike Jumps: {self.spikeJumps}\n'
+                f'Triple Jumps: {self.tripleJumps}\n'
+                f'Extended Jumps: {self.extendedJumps}')
+
+    def toRequirementValue(self):
+        return 1 * self.startWithBlueOrb + \
+            2 * self.startWithRedOrb + \
+            4 * self.startWithBoots + \
+            8 * self.startWithGloves + \
+            16 * self.spikeJumps + \
+            32 * self.tripleJumps + \
+            64 * self.extendedJumps
+
+    def setFromRequirementValue(self, value):
+        self.startWithBlueOrb = bool(value & 1)
+        self.startWithRedOrb = bool(value & 2)
+        self.startWithBoots = bool(value & 4)
+        self.startWithGloves = bool(value & 8)
+        self.spikeJumps = bool(value & 16)
+        self.tripleJumps = bool(value & 32)
+        self.extendedJumps = bool(value & 64)
 
 
 class RandomizerOptions(object):
@@ -50,7 +68,7 @@ class RandomizerOptions(object):
 
 
 def selectSpawnState(options):
-    startRequirements = buildSpawnRequirements(options.difficultyOptions)
+    startRequirements = options.difficultyOptions.toRequirementValue()
     spawnLocation = selectSpawnLocation(options.shuffleSpawn)
     return (spawnLocation, startRequirements)
 
@@ -63,16 +81,6 @@ def selectSpawnLocation(shuffleSpawn):
     :return: The spawn location to use
     """
     return DEFAULT_SPAWN
-
-
-def buildSpawnRequirements(difficultyOptions):
-    return 1 * difficultyOptions.startWithBlueOrb + \
-        2 * difficultyOptions.startWithRedOrb + \
-        4 * difficultyOptions.startWithBoots + \
-        8 * difficultyOptions.startWithGloves + \
-        16 * difficultyOptions.spikejumps + \
-        32 * difficultyOptions.triplejumps + \
-        64 * difficultyOptions.extendedjumps
 
 
 def selectOrbLocations(nrLocs=71, excludeLocs=[27, 43]):
