@@ -2,7 +2,7 @@ Thank you for trying out the You Have To Win The Game randomizer!
 This is version 1.3.
 This was originally created by ZZKer and extended by Spontanicus.
 If you have any questions or suggestions, feel free to contact me on discord @Spontanicus
-or better yet, join the Win the [Game community server](https://discord.com/invite/bZs99rY).
+or better yet, join the Win the Game [community server](https://discord.com/invite/bZs99rY).
 If you find any seeds that don't work, please use this github to report it as an Issue.
 
 ## Version features

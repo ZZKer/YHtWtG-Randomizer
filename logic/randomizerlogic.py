@@ -9,30 +9,81 @@ DEFAULT_RED_ORB = 63
 DEFAULT_BOOTS = 31
 DEFAULT_GLOVES = 69
 
+
 class TpShuffleMode(Enum):
     NORMAL = 0
     SHUFFLE_EXITS = 1
     SHUFFLE_ENTRYS = 2
     SHUFFLE_BOTH = 3
 
+
 class TPShuffleAmount(Enum):
     REGULAR = 0
     MORE = 1
     ALL = 2
 
+
+class DifficultyOptions(object):
+    startWithBlueOrb = False
+    startWithRedOrb = False
+    startWithBoots = False
+    startWithGloves = False
+    spikeJumps = False
+    tripleJumps = False
+    extendedJumps = False
+
+    def __str__(self):
+        return (f'Spike Jumps: {self.spikeJumps}\n'
+                f'Triple Jumps: {self.tripleJumps}\n'
+                f'Extended Jumps: {self.extendedJumps}')
+
+    def toRequirementValue(self):
+        return 1 * self.startWithBlueOrb + \
+            2 * self.startWithRedOrb + \
+            4 * self.startWithBoots + \
+            8 * self.startWithGloves + \
+            16 * self.spikeJumps + \
+            32 * self.tripleJumps + \
+            64 * self.extendedJumps
+
+    def setFromRequirementValue(self, value):
+        self.startWithBlueOrb = bool(value & 1)
+        self.startWithRedOrb = bool(value & 2)
+        self.startWithBoots = bool(value & 4)
+        self.startWithGloves = bool(value & 8)
+        self.spikeJumps = bool(value & 16)
+        self.tripleJumps = bool(value & 32)
+        self.extendedJumps = bool(value & 64)
+
+
 class RandomizerOptions(object):
-    shuffleSpawn = False
-    requireAllOrbs = False
-    tpMode = TpShuffleMode.NORMAL
-    tpAmount = TPShuffleAmount.REGULAR
-    hideTps = False
-    hidePowerups = False
+    shuffleSpawn = False  # TODO: Not supported yet
+    requireAllOrbs = False  # TODO: Not supported yet
+    tpMode = TpShuffleMode.NORMAL  # TODO: Not supported yet
+    tpAmount = TPShuffleAmount.REGULAR  # TODO: Not supported yet
+    hideTps = False  # TODO: Not supported yet
+    hidePowerups = False  # TODO: Not supported yet
     seed = None
+    difficultyOptions = DifficultyOptions()  # TODO: Not supported yet
 
-def selectSpawnLocation():
-    return (27,112)
 
-def selectOrbLocations(nrLocs = 71, excludeLocs = [27, 43]):
+def selectSpawnState(options):
+    startRequirements = options.difficultyOptions.toRequirementValue()
+    spawnLocation = selectSpawnLocation(options.shuffleSpawn)
+    return (spawnLocation, startRequirements)
+
+
+def selectSpawnLocation(shuffleSpawn):
+    """
+    Selects a valid spawn location
+    TODO: add spawn shuffle functionality
+    :param shuffleSpawn: Whether or not the spawn location should be shuffled with treasures
+    :return: The spawn location to use
+    """
+    return DEFAULT_SPAWN
+
+
+def selectOrbLocations(nrLocs=71, excludeLocs=[27, 43]):
     """
     Selects a random set of unique locations for the orbs.
     :param nrLocs:
@@ -41,14 +92,16 @@ def selectOrbLocations(nrLocs = 71, excludeLocs = [27, 43]):
     """
     orbs = []
     while len(orbs) < 4:
-        nextOrb = random.randint(0,nrLocs-1)
+        nextOrb = random.randint(0, nrLocs - 1)
         if nextOrb not in excludeLocs and nextOrb not in orbs:
             orbs += [nextOrb]
 
     return orbs
 
+
 def selectEndLocation():
     return 43
+
 
 def generateRandomSeed(options):
     if not isinstance(options, RandomizerOptions):
@@ -60,15 +113,16 @@ def generateRandomSeed(options):
     connectionTable, labels = calc.readTable("logic/reduced_map.csv")
 
     while True:
-        spawnLocation = selectSpawnLocation()
-        orbLocations = selectOrbLocations()
+        spawnState = selectSpawnState(options)
         endLocation = selectEndLocation()
+        orbLocations = selectOrbLocations(excludeLocs=[spawnState[0], endLocation])
 
-        solution = findSolution(connectionTable, spawnLocation, orbLocations, endLocation)
+        solution = findSolution(connectionTable, spawnState, orbLocations, endLocation)
         if solution:
             break
 
     return orbLocations
+
 
 def isLocationInList(locationList, location):
     for loc in locationList:
@@ -76,6 +130,7 @@ def isLocationInList(locationList, location):
             return True
 
     return False
+
 
 def getLocationRequirements(locationList, filterList):
     """
@@ -88,6 +143,7 @@ def getLocationRequirements(locationList, filterList):
         locReqList += [(filterIndex, locationList[filterIndex])]
 
     return locReqList
+
 
 def getReachableLocs(locationList, fulfilledRequirements):
     """
@@ -104,6 +160,7 @@ def getReachableLocs(locationList, fulfilledRequirements):
 
     return reachableLocs
 
+
 def fulfillsRequirements(reqList, fulfilledReqs):
     """
     Checks if a requirement value fulfills any of the requirements in a given list
@@ -115,6 +172,7 @@ def fulfillsRequirements(reqList, fulfilledReqs):
             return True
 
     return False
+
 
 def updateStates(locList, orbLocs, excludeLocs):
     """
@@ -131,6 +189,7 @@ def updateStates(locList, orbLocs, excludeLocs):
             newLocs += [loc]
     return newLocs
 
+
 def addPower(loc, orbLocs):
     """
     Adds the requirement fulfilled by a powerup to the given location state and returns it
@@ -142,6 +201,7 @@ def addPower(loc, orbLocs):
         if loc[0] == orbLocs[i]:
             return (loc[0], loc[1] | 2 ** i)
     return loc
+
 
 def findSolution(table, spawn, orbs, end):
     """
