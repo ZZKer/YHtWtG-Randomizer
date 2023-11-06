@@ -6,27 +6,33 @@ DEFAULT_GLOVES = "Spider Gloves Pickup"
 DEFAULT_LOSE = "Consolation Prize Pickup-1"
 DEFAULT_WIN = "Eponymous Pickup"
 
-def reduceReqs(reqs):
+def reduceReqs(reqs, paths = None):
     """
     Remove requirement values which represent a superset of another requirement.
     Example: [3 (blue orb, red orb),7 (blue orb, red orb, boots)]
           -> [3] (boots are not needed)
+          :param paths:
 
     """
+    if paths is None:
+        paths = []
     reducedReqs = []
+    reducedPaths = []
     reqs.sort()
-    for req in reqs:
+    paths.sort()
+    debugmode = len(paths) == len(reqs)
+    for i in range(len(reqs)):
+        req = reqs[i]
         add = True
         for newReq in reducedReqs:
-            if not newReq & ~ req:
-                add = False
-                break
-            elif not req & ~ newReq:
+            if newReq & req == newReq:
                 add = False
                 break
         if add:
-            reducedReqs = reducedReqs + [req]
-    return reducedReqs
+            reducedReqs += [req]
+            if debugmode:
+                reducedPaths += [paths[i]]
+    return reducedReqs, reducedPaths
 
 def calculateTotalRequirements(newLocationReqs, currentLocationReqs):
     """
@@ -45,7 +51,7 @@ def calculateTotalRequirements(newLocationReqs, currentLocationReqs):
             totalReqs[i*nrOldReqs+j] = newLocationReqs[i] | currentLocationReqs[j]
     return totalReqs
 
-def iterate(matrix, stateVector):
+def iterate(matrix, stateVector, paths = None):
     """
     Does one iteration of the requirement calculation for all location. Calculating the requirements to reach all
     locations on the map from a given spawn point can be done by using a stateVector with all locations set to [] or [-1] (impossible)
@@ -54,17 +60,53 @@ def iterate(matrix, stateVector):
     :param matrix: The matrix representing the logic graph for the game map
     :param stateVector: The current requirement state. Should be initialized with a (...[],[0],[],...) where the [0]
     represents the spawn location
+    :param paths: If a vector of paths is provided newly reached locations
+    (or locations reached with a new requirement value) will also add a new path to the path vector.
+    Can be used to generate a path from the initial location to each of the other locations.
     :return: The updated state vector after moving along the edges of the graph. Feed this back into this method as
     the new state vector to make multiple movements.
     """
     ret = [[] for _ in range(len(stateVector))]
+    debugMode = (paths is not None and len(paths) == len(stateVector))
+
     for i in range(len(matrix)):
+        newPaths = []
         for j in range(len(matrix)):
             #print(f'{matrix[j][i]}, {stateVector[i]}')
-            ret[i] += calculateTotalRequirements(matrix[j][i], stateVector[j])
+            newReqs = calculateTotalRequirements(matrix[j][i], stateVector[j])
+            ret[i] += newReqs
+            if debugMode:
+                for req in newReqs:
+                    newPaths += [(req, j)]
         #print(ret[i])
-        ret[i] = reduceReqs(ret[i])
+        ret[i], newPaths = reduceReqs(ret[i], newPaths)
+        if debugMode:
+            reducePaths(paths[i], newPaths)
+
     return ret
+
+def reducePaths(oldPaths, newPaths):
+    """
+    Checks existing paths and adds new paths with different requirements or replaces them with new paths having less
+    requirements
+    :param oldPaths: The existing paths
+    :param newPaths: Paths to check for better or different alternatives
+    """
+    for newPath in newPaths:
+        add = True
+        deleteList = []
+        for oldReq in oldPaths.keys():
+            if oldReq & newPath[0] == oldReq:
+                add = False
+                break
+            if oldReq & newPath[0] == newPath[0]:
+                deleteList += [oldReq]
+
+        for toDel in deleteList:
+            del(oldPaths[toDel])
+
+        if add:
+            oldPaths[newPath[0]] = newPath[1]
 
 def readTable(file):
     """
@@ -185,12 +227,16 @@ def getStateListFromFile(stateNameFile):
 
     return stateNames
 
-def getInitialState(locationList, startLocation = DEFAULT_SPAWN):
+def getInitialState(locationList, startLocation = DEFAULT_SPAWN, debug = False):
     """
     Creates an initial state for the iterate function
     """
     startLocationPosition = locationList.index(startLocation)
-    return [[] for _ in range(startLocationPosition)] + [[0]] + [[] for _ in range(len(locationList)-startLocationPosition-1)]
+    if debug:
+        paths = [{} for _ in range(startLocationPosition)] + [{0: -1}] + [{} for _ in range(len(locationList)-startLocationPosition-1)]
+    else:
+        paths = None
+    return [[] for _ in range(startLocationPosition)] + [[0]] + [[] for _ in range(len(locationList)-startLocationPosition-1)], paths
 
 def findPoIs(locations):
     """
@@ -205,7 +251,7 @@ def findPoIs(locations):
     return pois
 
 
-def findFinalState(matrix, initialState):
+def findFinalState(matrix, initialState, paths = None):
     """
     Calculates requirements to reach all locations on the map from an initial state
     :param matrix: The location graph matrix
@@ -213,11 +259,11 @@ def findFinalState(matrix, initialState):
     :return: The complete list of requirements for all locations
     """
     oldState = initialState
-    currentState = iterate(matrix,oldState)
+    currentState = iterate(matrix, oldState, paths)
 
     while getTableLine(oldState) != getTableLine(currentState):
         oldState = currentState
-        currentState = iterate(matrix, oldState)
+        currentState = iterate(matrix, oldState, paths)
 
     return currentState
 
@@ -233,7 +279,7 @@ def findSubIndex(fullList, subList):
 
     return indices
 
-def reduceRequirementTable(table, labels, reducedLocations = None):
+def reduceRequirementTable(table, labels, reducedLocations = None, pathsMatrix = None):
     """
     Calculates requirements to reach any location on the map from any other location and returns the entries for
     the given set of locations. Can be used to precalculate the connections between all pickup locations + other
@@ -241,6 +287,7 @@ def reduceRequirementTable(table, labels, reducedLocations = None):
     :param table: Location graph matrix
     :param labels: Full list of Location names
     :param reducedLocations: List of relevant locations
+    :param debug: If set to true, a path for each connection requirement will saved in a separate debug table
     """
     if reducedLocations == None:
         reducedLocations = []
@@ -251,13 +298,25 @@ def reduceRequirementTable(table, labels, reducedLocations = None):
     reducedTable = [[] for _ in range(len(reducedLocations))]
     reducedIndex = findSubIndex(labels, reducedLocations)
 
+    debugMode = pathsMatrix != None
     print(f'(0/{len(reducedLocations)})')
     for i in range(len(reducedLocations)):
         startLocation = reducedLocations[i]
-        initialState = getInitialState(labels, startLocation)
-        finalState = findFinalState(table, initialState)
+        initialState, paths = getInitialState(labels, startLocation, debugMode)
+        finalState = findFinalState(table, initialState, paths)
         reducedTable[i] = [finalState[x] for x in reducedIndex]
         print(f'({i+1}/{len(reducedLocations)})')
+        if debugMode:
+            pathsMatrix.append(paths)
 
     return reducedTable, reducedLocations
 
+def printPath(pathMatrix, locationIndex, requirementValue, labels):
+    while locationIndex != -1:
+        print(labels[locationIndex])
+        newLocIndex = -1
+        for key in pathMatrix[locationIndex].keys():
+            if key & requirementValue == key:
+                newLocIndex = pathMatrix[locationIndex][key]
+
+        locationIndex = newLocIndex

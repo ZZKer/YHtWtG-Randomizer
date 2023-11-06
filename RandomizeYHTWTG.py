@@ -11,150 +11,162 @@ from logic import randomizerlogic as logic
 # Runs the randomizer code based on the given seed.
 #     This should run when the "Randomize" button is pressed
 def run_randomizer():
-      # First, get the seed
-      seed = eseed.get()
-      if seed == None or len(seed) == 0:
-            random.seed()
-            seed = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
-      random.seed(seed)
+    # First, get the seed
+    seed = eseed.get()
+    if seed == None or len(seed) == 0:
+        random.seed()
+        seed = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+    random.seed(seed)
 
-      Treasure=[(-10,3,'xxxx',292,36),#0
-          (-9,6,'xXXX',220,84),#1
-          (-8,1,'xx11',36,180),(-8,2,'xxxx',160,124),(-8,3,'xXXx',108,44),(-8,5,'xxx1',100,148),(-8,6,'xXXX',236,124),#2-6
-          (-7,1,'xxxx',252,180),(-7,2,'xxxx',236,44),(-7,2,'xxxx',20,116),(-7,4,'xxXX',212,68),#7-10
-          (-6,3,'xx1x',252,68),(-6,4,'xxXX',244,44),(-6,6,'xx11',244,108),#11-13
-          (-5,0,'xx11',276,148),(-5,1,'1xxx',204,68),(-5,2,'xxxx',228,172),(-5,3,'xxxx',44,28),(-5,6,'xxXX',220,84),(-5,6,'xx1x',164,132),#14-19
-          (-4,-1,'xx11',164,68),(-4,0,'xxxx',68,148),(-4,0,'xx11',44,52),(-4,3,'0xxX',268,108),(-4,3,'xXXX',236,180),(-4,6,'xXXX',292,84),#20-25
-          (-3,-2,'xx11',292,44),(-3,0,'xx11',76,156),(-3,0,'xx11',44,68),(-3,1,'xx1x',228,180),(-3,2,'XXxX',284,108),(-3,5,'xXXX',160,124),(-3,6,'xx1x',180,172),#26-32
-          (-2,-1,'xX1A',124,124),(-2,0,'xxA1',20,76),(-2,3,'XXXX',256,68),(-2,4,'EExX',308,76),#33-36
-          (-1,0,'xxx1',188,172),(-1,1,'xxx1',36,148),(-1,2,'xxxx',228,52),(-1,3,'XxXX',132,108),#37-40
-          (0,-3,'xx11',292,180),(0,-3,'xx11',160,140),(0,0,'xxxx',228,76),(0,3,'xxXX',68,84),(0,4,'11xx',188,132),#41-45
-          (1,-1,'xx11',172,176),(1,-1,'xXA1',36,124),(1,0,'xxxx',36,156),(1,2,'1xxx',52,68),(1,4,'x1xx',28,76),#46-50
-          (2,0,'1x11',124,172),(2,2,'1xxx',268,84),(2,4,'x1XX',244,76),#51-53
-          (3,3,'xxxx',196,60),(3,5,'xx11',76,92),#54-55
-          (4,3,'xXXx',212,92),#56
-          (5,0,'1x1x',292,180),(5,0,'1xx1',108,84),(5,1,'1x1x',44,84),(5,2,'EEXx',180,60),(5,4,'xx1x',284,108),(5,6,'xxxx',160,124),#57-62
-          (6,1,'1x1x',212,84),#63
-          (7,-1,'1x11',92,148),(7,0,'1xXX',148,124),(7,3,'1x11',252,100),(7,3,'1x11',68,100),#64-67
-          (8,1,'1xXX',160,124),(8,2,'1x1x',300,180)]#68-69
-      loseorb = 42
-      options = logic.RandomizerOptions()
-      options.difficultyOptions = diffChoiceDict[diffChoice.get()]
-      options.shuffleSpawn = op_shuffleSpawn.get()
-      options.seed = seed
-      spawnState, spots = logic.generateRandomSeed(options)
+    Treasure = [(-10, 3, 'xxxx', 292, 36),  # 0
+                (-9, 6, 'xXXX', 220, 84),  # 1
+                (-8, 1, 'xx11', 36, 180), (-8, 2, 'xxxx', 160, 124), (-8, 3, 'xXXx', 108, 44),
+                (-8, 5, 'xxx1', 100, 148), (-8, 6, 'xXXX', 236, 124),  # 2-6
+                (-7, 1, 'xxxx', 252, 180), (-7, 2, 'xxxx', 236, 44), (-7, 2, 'xxxx', 20, 116), (-7, 4, 'xxXX', 212, 68),
+                # 7-10
+                (-6, 3, 'xx1x', 252, 68), (-6, 4, 'xxXX', 244, 44), (-6, 6, 'xx11', 244, 108),  # 11-13
+                (-5, 0, 'xx11', 276, 148), (-5, 1, '1xxx', 204, 68), (-5, 2, 'xxxx', 228, 172), (-5, 3, 'xxxx', 44, 28),
+                (-5, 6, 'xxXX', 220, 84), (-5, 6, 'xx1x', 164, 132),  # 14-19
+                (-4, -1, 'xx11', 164, 68), (-4, 0, 'xxxx', 68, 148), (-4, 0, 'xx11', 44, 52), (-4, 3, '0xxX', 268, 108),
+                (-4, 3, 'xXXX', 236, 180), (-4, 6, 'xXXX', 292, 84),  # 20-25
+                (-3, -2, 'xx11', 292, 44), (-3, 0, 'xx11', 76, 156), (-3, 0, 'xx11', 44, 68), (-3, 1, 'xx1x', 228, 180),
+                (-3, 2, 'XXxX', 284, 108), (-3, 5, 'xXXX', 160, 124), (-3, 6, 'xx1x', 180, 172),  # 26-32
+                (-2, -1, 'xX1A', 124, 124), (-2, 0, 'xxA1', 20, 76), (-2, 3, 'XXXX', 256, 68), (-2, 4, 'EExX', 308, 76),
+                # 33-36
+                (-1, 0, 'xxx1', 188, 172), (-1, 1, 'xxx1', 36, 148), (-1, 2, 'xxxx', 228, 52),
+                (-1, 3, 'XxXX', 132, 108),  # 37-40
+                (0, -3, 'xx11', 292, 180), (0, -3, 'xx11', 160, 140), (0, 0, 'xxxx', 228, 76), (0, 3, 'xxXX', 68, 84),
+                (0, 4, '11xx', 188, 132),  # 41-45
+                (1, -1, 'xx11', 172, 176), (1, -1, 'xXA1', 36, 124), (1, 0, 'xxxx', 36, 156), (1, 2, '1xxx', 52, 68),
+                (1, 4, 'x1xx', 28, 76),  # 46-50
+                (2, 0, '1x11', 124, 172), (2, 2, '1xxx', 268, 84), (2, 4, 'x1XX', 244, 76),  # 51-53
+                (3, 3, 'xxxx', 196, 60), (3, 5, 'xx11', 76, 92),  # 54-55
+                (4, 3, 'xXXx', 212, 92),  # 56
+                (5, 0, '1x1x', 292, 180), (5, 0, '1xx1', 108, 84), (5, 1, '1x1x', 44, 84), (5, 2, 'EEXx', 180, 60),
+                (5, 4, 'xx1x', 284, 108), (5, 6, 'xxxx', 160, 124),  # 57-62
+                (6, 1, '1x1x', 212, 84),  # 63
+                (7, -1, '1x11', 92, 148), (7, 0, '1xXX', 148, 124), (7, 3, '1x11', 252, 100), (7, 3, '1x11', 68, 100),
+                # 64-67
+                (8, 1, '1xXX', 160, 124), (8, 2, '1x1x', 300, 180)]  # 68-69
+    loseorb = 42
+    options = logic.RandomizerOptions()
+    options.difficultyOptions = diffChoiceDict[diffChoice.get()]
+    options.shuffleSpawn = op_shuffleSpawn.get()
+    options.seed = seed
+    spawnState, spots = logic.generateRandomSeed(options)
 
-      for i in range(len(spots)):
-            if spots[i] > 43:
-                  spots[i] -= 1
-      spots.append(loseorb)
+    for i in range(len(spots)):
+        if spots[i] > 43:
+            spots[i] -= 1
+    spots.append(loseorb)
 
-      if spawnState[0] > 43:
-            spawnState = (spawnState[0]-1, spawnState[1])
-      spawnLocation = Treasure[spawnState[0]]
+    if spawnState[0] > 43:
+        spawnState = (spawnState[0] - 1, spawnState[1])
+    spawnLocation = Treasure[spawnState[0]]
 
+    # print(f'spots: {spots}, spawn: {spawnState}')
+    writefilename = 'Rooms_random_' + seed + '.xml'
+    readfile = open('Rooms_randomBase.xml')
+    writefile = open(writefilename, 'w')
+    t = 0
+    tcords = 'room x="' + str((Treasure[t])[0]) + '" y="' + str((Treasure[t])[1]) + '"'
+    if op_lose.get():
+        treasureEntity = 'orb_lose'
+    else:
+        treasureEntity = 'cash'
+    gateforallorbs = op_allorbs.get()
+    for line in readfile:
+        writefile.write(line)
+        if ('room x="-1" y="-2"' in line):
+            if (gateforallorbs):
+                newline = '<entity template="gate" x="296" y="144" destwx="1" destwy="-2" destrx="24" destry="152" />\n'
+            else:
+                newline = '<entity template="gate" x="296" y="144" destwx="0" destwy="-2" destrx="24" destry="152" />\n'
+            writefile.write(newline)
+        elif ('room x="0" y="-3"' in line):
+            newline = '<entity template="gate" x="296" y="144" destwx="-3" destwy="0" destrx="24" destry="144" />\n'
+            writefile.write(newline)
+        if (tcords in line):
+            if (t in spots):
+                whichorb = spots.index(t)
+                newline = '<entity template="orb_'
+                if (whichorb == 0):
+                    newline += 'blue'
+                elif (whichorb == 1):
+                    newline += 'red'
+                elif (whichorb == 2):
+                    newline += 'boots'
+                elif (whichorb == 3):
+                    newline += 'gloves'
+                else:
+                    newline += 'lose'
+                newline += '" x="' + str((Treasure[t])[3]) + '" y="' + str((Treasure[t])[4] - 4) + '" />\n'
+                writefile.write(newline)
+            elif not t == spawnState[0]:
+                newline = f'<entity template="{treasureEntity}" x="' + str((Treasure[t])[3]) + '" y="' + str(
+                    (Treasure[t])[4]) + '" />\n'
+                writefile.write(newline)
+            t += 1
+            if (t < len(Treasure) and (Treasure[t])[0] == (Treasure[t - 1])[0] and (Treasure[t])[1] ==
+                    (Treasure[t - 1])[1]):
+                if (t in spots):
+                    whichorb = spots.index(t)
+                    newline = '<entity template="orb_'
+                    if (whichorb == 0):
+                        newline += 'blue'
+                    elif (whichorb == 1):
+                        newline += 'red'
+                    elif (whichorb == 2):
+                        newline += 'boots'
+                    elif (whichorb == 3):
+                        newline += 'gloves'
+                    else:
+                        newline += 'lose'
+                    newline += '" x="' + str((Treasure[t])[3]) + '" y="' + str((Treasure[t])[4] - 4) + '" />\n'
+                    writefile.write(newline)
+                else:
+                    newline = f'<entity template="{treasureEntity}" x="' + str((Treasure[t])[3]) + '" y="' + str(
+                        (Treasure[t])[4]) + '" />\n'
+                    writefile.write(newline)
+                t += 1
+            if (t < len(Treasure)):
+                tcords = 'room x="' + str((Treasure[t])[0]) + '" y="' + str((Treasure[t])[1]) + '"'
+    readfile.close()
+    # op_allorbs code for rooms
+    if (gateforallorbs):
+        newline = '\n\n<room x="1" y="-2" title="What Do I Win?" />\n\n'
+        newline += '<room x="2" y="-2" title="Only A Transition" />\n\n'
+        newline += '<room x="3" y="-2" title="Eponymous">\n'
+        newline += '<entity template="orb_win" x="300" y="176" />\n</room>\n'
+    else:
+        newline = '\n\n<room x="0" y="-2" title="Eponymous">\n'
+        newline += '<entity template="orb_win" x="160" y="136" />\n</room>\n'
+    writefile.write(newline)
+    writefile.close()
 
-      print(f'spots: {spots}, spawn: {spawnState}')
-      writefilename = 'Rooms_random_' + seed + '.xml'
-      readfile = open('Rooms_randomBase.xml')
-      writefile = open(writefilename, 'w')
-      t = 0
-      tcords = 'room x="'+str((Treasure[t])[0])+'" y="'+str((Treasure[t])[1])+'"'
-      if op_lose.get():
-            treasureEntity = 'orb_lose'
-      else:
-            treasureEntity = 'cash'
-      gateforallorbs = op_allorbs.get()
-      for line in readfile:
-            writefile.write(line)
-            if('room x="-1" y="-2"' in line):
-                  if(gateforallorbs):
-                        newline = '<entity template="gate" x="296" y="144" destwx="1" destwy="-2" destrx="24" destry="152" />\n'
-                  else:
-                        newline = '<entity template="gate" x="296" y="144" destwx="0" destwy="-2" destrx="24" destry="152" />\n'
-                  writefile.write(newline)
-            elif('room x="0" y="-3"' in line):
-                  newline = '<entity template="gate" x="296" y="144" destwx="-3" destwy="0" destrx="24" destry="144" />\n'
-                  writefile.write(newline)
-            if(tcords in line):
-                  if(t in spots):
-                        whichorb = spots.index(t)
-                        newline = '<entity template="orb_'
-                        if(whichorb==0):
-                              newline += 'blue'
-                        elif(whichorb==1):
-                              newline += 'red'
-                        elif(whichorb==2):
-                              newline += 'boots'
-                        elif(whichorb==3):
-                              newline += 'gloves'
-                        else:
-                              newline += 'lose'
-                        newline += '" x="' + str((Treasure[t])[3]) + '" y="' + str((Treasure[t])[4]-4) + '" />\n'
-                        writefile.write(newline)
-                  elif not t == spawnState[0]:
-                        newline = f'<entity template="{treasureEntity}" x="' + str((Treasure[t])[3]) + '" y="' + str((Treasure[t])[4]) + '" />\n'
-                        writefile.write(newline)
-                  t += 1
-                  if(t < len(Treasure) and (Treasure[t])[0] == (Treasure[t-1])[0] and (Treasure[t])[1] == (Treasure[t-1])[1]):
-                        if(t in spots):
-                              whichorb = spots.index(t)
-                              newline = '<entity template="orb_'
-                              if(whichorb==0):
-                                    newline += 'blue'
-                              elif(whichorb==1):
-                                    newline += 'red'
-                              elif(whichorb==2):
-                                    newline += 'boots'
-                              elif(whichorb==3):
-                                    newline += 'gloves'
-                              else:
-                                    newline += 'lose'
-                              newline += '" x="' + str((Treasure[t])[3]) + '" y="' + str((Treasure[t])[4]-4) + '" />\n'
-                              writefile.write(newline)
-                        else:
-                              newline = f'<entity template="{treasureEntity}" x="' + str((Treasure[t])[3]) + '" y="' + str((Treasure[t])[4]) + '" />\n'
-                              writefile.write(newline)
-                        t += 1
-                  if(t < len(Treasure)):
-                        tcords = 'room x="'+str((Treasure[t])[0])+'" y="'+str((Treasure[t])[1])+'"'
-      readfile.close()
-      #op_allorbs code for rooms
-      if(gateforallorbs):
-            newline = '\n\n<room x="1" y="-2" title="What Do I Win?" />\n\n'
-            newline += '<room x="2" y="-2" title="Only A Transition" />\n\n'
-            newline += '<room x="3" y="-2" title="Eponymous">\n'
-            newline += '<entity template="orb_win" x="300" y="176" />\n</room>\n'
-      else:
-            newline = '\n\n<room x="0" y="-2" title="Eponymous">\n'
-            newline += '<entity template="orb_win" x="160" y="136" />\n</room>\n'
-      writefile.write(newline)
-      writefile.close()
+    # Write the GAM file
+    gamfilename = 'random_' + seed + '.gam'
+    writefile = open(gamfilename, 'w')
+    gam_text = 'Title: Rand-' + seed + '\n'
+    gam_text += 'FullTitle: Randomizer seed ' + seed + '\n'
+    gam_text += 'DevTeam: ZZKylie & the WtG Discord\n'
+    gam_text += 'DevLogo: phearts.bmp\n'
+    gam_text += "Author: ZZKylie / ZZKer" + '\n'
+    gam_text += "URL: ZZKer#1962" + '\n'
+    gam_text += 'Description: Orb Randomizer version 1.3\n'
+    gam_text += 'MajorVersion: 1\n'
+    gam_text += 'MinorVersion: 3\n'
+    gam_text += 'Map: randomBase.map\n'
+    gam_text += 'Content: DefaultContent.ini\n'
+    gam_text += 'Rooms: ' + writefilename + '\n'
+    gam_text += f'StartX: {spawnLocation[0]}\nStartY: {spawnLocation[1]}\n'
+    writefile.write(gam_text)
+    writefile.close()
 
+    # look into possible bell softlocks
 
-      # Write the GAM file
-      gamfilename = 'random_' + seed + '.gam'
-      writefile = open(gamfilename, 'w')
-      gam_text = 'Title: Rand-' + seed + '\n'
-      gam_text += 'FullTitle: Randomizer seed ' + seed +'\n'
-      gam_text += 'DevTeam: ZZKylie & the WtG Discord\n'
-      gam_text += 'DevLogo: phearts.bmp\n'
-      gam_text += "Author: ZZKylie / ZZKer" + '\n'
-      gam_text += "URL: ZZKer#1962" + '\n'
-      gam_text += 'Description: Orb Randomizer version 1.3\n'
-      gam_text += 'MajorVersion: 1\n'
-      gam_text += 'MinorVersion: 3\n'
-      gam_text += 'Map: randomBase.map\n'
-      gam_text += 'Content: DefaultContent.ini\n'
-      gam_text += 'Rooms: ' + writefilename + '\n'
-      gam_text += f'StartX: {spawnLocation[0]}\nStartY: {spawnLocation[1]}\n'
-      writefile.write(gam_text)
-      writefile.close()
-
-      #look into possible bell softlocks
-
-      #Let user know Randomization is done
-      output_label['text'] = 'Randomization complete with seed: "' + seed + '"'
+    # Let user know Randomization is done
+    output_label['text'] = 'Randomization complete with seed: "' + seed + '"'
 
 
 def set_settings():
@@ -181,8 +193,10 @@ def set_settings():
 
     setSettingsString()
 
+
 def getDifficultyString():
     return str(diffChoiceDict[diffChoice.get()].toRequirementValue()).rjust(3, '0')
+
 
 def setSettingsString():
     settingsString = ''
@@ -194,6 +208,7 @@ def setSettingsString():
         settingsString += 'S'
     settingsString += getDifficultyString()
     settingsSeedString.set(settingsString)
+
 
 class CustomDifficultyWindow(Toplevel):
 
@@ -214,18 +229,19 @@ class CustomDifficultyWindow(Toplevel):
 
         difficultyFrame = Frame(self)
         difficultyFrame.grid(row=0, column=0, sticky=(N, E, S, W), padx=5, pady=5)
-        checkSpikeJumps = Checkbutton(difficultyFrame, text='Spikejumps', variable=self.spikeJumpVar, command=self.updateDifficultySettings)
+        checkSpikeJumps = Checkbutton(difficultyFrame, text='Spikejumps', variable=self.spikeJumpVar,
+                                      command=self.updateDifficultySettings)
         checkSpikeJumps.grid(row=0, column=0, sticky=W)
         checkTripleJumps = Checkbutton(difficultyFrame, text='Ground Grace Storage (aka Triple Jumps)',
-                                               variable=self.tripleJumpVar, command=self.updateDifficultySettings)
+                                       variable=self.tripleJumpVar, command=self.updateDifficultySettings)
         checkTripleJumps.grid(row=1, column=0, sticky=W)
         checkExtendedJumps = Checkbutton(difficultyFrame, text='Refire Grace Storage (aka Extended Jumps)',
-                                                 variable=self.extendedJumpVar, command=self.updateDifficultySettings)
+                                         variable=self.extendedJumpVar, command=self.updateDifficultySettings)
         checkExtendedJumps.grid(row=2, column=0, sticky=W)
 
-        closeButton = tkinter.Button(difficultyFrame, text='Close', command=self.close,)
+        closeButton = tkinter.Button(difficultyFrame, text='Close', command=self.close, )
         self.protocol("WM_DELETE_WINDOW", self.close)
-        closeButton.grid(row=3, column=0, sticky=(W,E,S))
+        closeButton.grid(row=3, column=0, sticky=(W, E, S))
 
         self.transient(parent)
         self.wait_visibility()
@@ -257,8 +273,6 @@ def openCustomDifficultyWindow():
     setSettingsString()
 
 
-
-
 diffOptionGlitchless = logic.DifficultyOptions()
 diffOptionUnrestricted = logic.DifficultyOptions()
 diffOptionUnrestricted.spikeJumps = True
@@ -273,7 +287,7 @@ diffChoiceDict = {'unrestricted': diffOptionUnrestricted, 'glitchless': diffOpti
 mainwindow = Tk()
 mainwindow.title('You Have To Randomize The Game v1.3')
 mainframe = Frame(mainwindow)
-mainframe.grid(column=0, row=0, sticky=(N,W,E), padx=5, pady=5)
+mainframe.grid(column=0, row=0, sticky=(N, W, E), padx=5, pady=5)
 
 rowCounter = itertools.count()
 # Options
@@ -283,7 +297,8 @@ op_shuffleSpawn = BooleanVar()
 op_difficulty = logic.DifficultyOptions()
 check_allorbs = Checkbutton(mainframe, text='Require All Orbs', variable=op_allorbs, command=setSettingsString)
 check_lose = Checkbutton(mainframe, text='Replace Treasure with Lose', variable=op_lose, command=setSettingsString)
-check_shuffleSpawn = Checkbutton(mainframe, text='Shuffle Spawn Location', variable=op_shuffleSpawn, command=setSettingsString)
+check_shuffleSpawn = Checkbutton(mainframe, text='Shuffle Spawn Location', variable=op_shuffleSpawn,
+                                 command=setSettingsString)
 check_allorbs.grid(row=next(rowCounter), sticky=W)
 check_lose.grid(row=next(rowCounter), sticky=W)
 check_shuffleSpawn.grid(row=next(rowCounter), sticky=W)
@@ -294,22 +309,21 @@ diffChoice.set('unrestricted')
 diffLabel = Label(difficultySettings, text='Difficulty:')
 diffLabel.grid(row=0, sticky=W)
 diffUnrestricted = Radiobutton(difficultySettings, text='Unrestricted', variable=diffChoice,
-                                        value='unrestricted', command=setSettingsString)
-diffUnrestricted.grid(row=1, sticky=W, padx=(10,0))
+                               value='unrestricted', command=setSettingsString)
+diffUnrestricted.grid(row=1, sticky=W, padx=(10, 0))
 diffGlitchless = Radiobutton(difficultySettings, text='Glitchless', variable=diffChoice, value='glitchless',
-                                      command=setSettingsString)
-diffGlitchless.grid(row=2, sticky=W, padx=(10,0))
+                             command=setSettingsString)
+diffGlitchless.grid(row=2, sticky=W, padx=(10, 0))
 diffCustom = Radiobutton(difficultySettings, text='Custom', variable=diffChoice, value='custom',
-                                  command=openCustomDifficultyWindow)
-diffCustom.grid(row=3, sticky=W, padx=(10,0))
+                         command=openCustomDifficultyWindow)
+diffCustom.grid(row=3, sticky=W, padx=(10, 0))
 # diff_custom = tkinter.Radiobutton(difficultySettings, text='Custom', variable=diffChoice, value=2, command=printChoice)
 # diff_custom.grid(row=2, sticky=W)
 difficultySettings.grid(row=next(rowCounter), column=0, sticky=W)
 
-
-ttk.Separator(mainwindow).grid(row=1, sticky=(W,E))
+ttk.Separator(mainwindow).grid(row=1, sticky=(W, E))
 seedframe = Frame(mainwindow)
-seedframe.grid(row=2, column=0, sticky=(S,W,E), padx=5, pady=5)
+seedframe.grid(row=2, column=0, sticky=(S, W, E), padx=5, pady=5)
 # Settings Seed: This is the seed used for your settings
 settingsSeedString = StringVar()
 Label(seedframe, text='Settings Seed:').grid(row=0, column=0)

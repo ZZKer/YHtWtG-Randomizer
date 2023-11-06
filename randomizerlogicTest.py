@@ -67,7 +67,7 @@ class RandomizerLogicTest(unittest.TestCase):
     @patch('logic.randomizerlogic.selectOrbLocations')
     def test_generateRandomSeed(self, orbSelectionMock):
         orbSelectionMock.return_value = [3, 63, 31, 69]
-        self.assertEqual(logic.generateRandomSeed(logic.RandomizerOptions()), [3,63,31,69])
+        self.assertEqual(logic.generateRandomSeed(logic.RandomizerOptions()), ((27,0),[3,63,31,69]))
         
     def test_selectOrbLocations(self):
         random.seed(0)

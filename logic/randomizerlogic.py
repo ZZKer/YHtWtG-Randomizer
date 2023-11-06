@@ -127,8 +127,8 @@ def generateRandomSeed(options):
         solution = findSolution(connectionTable, spawnState, orbLocations, endLocation)
 
         if solution:
-            print(f'spots: {orbLocations}, spawn: {spawnState}')
-            print(f'spotsNames: {[labels[i] for i in orbLocations]}, spawn: {(labels[spawnState[0]],spawnState[1])}')
+            #print(f'spots: {orbLocations}, spawn: {spawnState}')
+            #print(f'spotsNames: {[labels[i] for i in orbLocations]}, spawn: {(labels[spawnState[0]],spawnState[1])}')
             break
 
     return spawnState, orbLocations
