@@ -222,7 +222,7 @@ def findSolution(table, spawn, orbs, end):
     visitedLocations = []
     solution = None
     while not isLocationInList(currentLocations, end) and len(currentLocations) > 0:
-        print(currentLocations)
+        # print(currentLocations)
         loc = currentLocations.pop()
         visitedLocations += [loc]
 
